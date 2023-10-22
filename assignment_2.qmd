@@ -1,26 +1,52 @@
 ---
-title: "Assignment 2"
-format: html
+title: "Assignment 2: Cross-sectional estimates"
+author: "Anine Therese Karlsen & Mona Lisa Jones"
+format: pdf
+abstract: "This assignment aims to acquire, process, and analyze sub-national GDP and population data for a subset of European countries. Calculate GDP per capita and explore regional inequity using various descriptive statistics and visualizations."
 editor: visual
+bibliography: [Econometrics.bib]
+page-layout: full
+number-sections: true
+papersize: a4
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
-```
+#| label: setup
+#| echo: false
+#| output: false
 
-You can add options to executable code like this
+library(tidyverse)
+library(ggplot2)
+library(magrittr)
+library(dineq)
+library(readxl)
+```
 
 ```{r}
 #| echo: false
-2 * 2
+#| output: false
+
+# Adding data into dataset
+
+# Data for population
+pop_data <- read_csv("Raw_data/demo.gz")
+
+# Data for GDP
+gdp_data <- read_csv("Raw_data/nama.gz")
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+# Part A: Growth and Inequity
+
+## 1. Model Estimation
+
+## 2. Model Diagnostics
+
+## 3. Visualization
+
+# Part B: Exploring Other Determinants of Inequity
+
+## 1. Data acquisition
+
+## 2. Multiple Linear Regression Model
+
+## 3. Model Interpretation

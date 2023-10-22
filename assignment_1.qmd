@@ -1,26 +1,518 @@
 ---
-title: "Assignment 1"
-format: html
+title: "Assignment 1: Data and Descriptive"
+author: "Anine Therese Karlsen & Mona Lisa Jones"
+format: pdf
+abstract: "This assignment aims to acquire, process, and analyze sub-national GDP and population data for a subset of European countries. Calculate GDP per capita and explore regional inequity using various descriptive statistics and visualizations."
 editor: visual
+bibliography: [Econometrics.bib]
+page-layout: full
+number-sections: true
+papersize: a4
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+#| label: setup
+#| output: false
+#| echo: false
+
+library(tidyverse)
+library(tinytex)
+library(ggplot2)
+library(readxl)
+library(magrittr)
+library(vtable)
+library(lubridate)
+library(dineq)
 ```
 
-You can add options to executable code like this
+# Introduction
+
+While national GDP and GDP per capita are vital indicators of a country's aggregate economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, paradoxically, coexist with pockets of regional deprivation [@lessmann2017].
+
+The truth of this statement becomes more evident when taking a closer look in to into sub-national data. Regional wealth disparities are of prime concern, especially when crafting policies for equitable growth [@lessmann2017]. A country's macro-level prosperity does not automatically guarantee that all its regions partake equally in this wealth. By studying smaller regions within a country, it is possible to get a more nuanced narrative about the state of regional economic disparities [@lessmann2017].
+
+This assignment is anchored in this very premise. It seeks to acquire, process, and analyse sub-national GDP and population data for a selected subset of European countries, namely France, Denmark, Hungary, Portugal, and Slovakia, spanning the period from 2000 to 2020. The overarching aim is to calculate GDP per capita for these regions and delve into the intricacies of regional inequity. This exploration will be underpinned by various descriptive statistics, visualizations, and analytical techniques to paint a comprehensive picture of regional economic landscapes.
+
+Using time series data observing the GDP per capita and GINI trends across regions and over time, we can discern whether certain areas are ahead or behind in economic performance.
+
+# Literature review
+
+"In recent decades, the regional distribution of incomes within countries has attracted considerable interest among academics and policy makers." [@lessmann2017]
+
+Slovakia, experienced significant economic growth. Their GDP per capita grew faster than the older EU member states, albeit from a lower starting point, leading to a convergence [@fullart].
+
+The global financial crisis and subsequent European debt crisis had significant impacts on European economies. GDP per capita declined in several countries, particularly those hit hardest by the crisis, such as Greece, Spain, and Portugal. Some regions took many years to recover to pre-crisis levels, while others, especially in Northern Europe, recovered more quickly [@lewis].
+
+Major metropolitan areas, like Paris in France, London in the UK, and Berlin in Germany, often grew faster than other regions in their respective countries, leading to increasing spatial disparities [@kiuru2019].
+
+Denmark maintained relatively high levels of GDP per capita throughout this period, benefiting from a diversified economy, strong institutions, and a high degree of economic openness. It did face challenges during the 2008 economic crisis but recovered relatively quickly [@dynamics].
+
+Slovenia, which joined the EU in 2004, showed growth in GDP per capita, though it too was affected by the global economic downturn in 2008. However, it managed to recover in the subsequent years [@fullart].
+
+Regional disparities persisted, with the Île-de-France region (which includes Paris) significantly outperforming other regions in terms of GDP per capita. The gap between urban and rural areas also remained a topic of discussion [@regional].
+
+Towards the end of this period, in early 2020, the COVID-19 pandemic posed a new set of challenges for European economies, causing significant contractions in GDP per capita across many regions [@regional].
+
+# Part A: Sub-national GDP and GDP per Capita
+
+## Data Acquisition and datasets
+
+The first thing we did in this assignment was to acquire our data. Trough Eurostat, we could download the datasets nama_10r_3gdp and demo_r_pjanggr3 as csv files, as well as filter the data by our preferences before downloading it. As per the assignment, we filtered the dataset by choosing the years 2000 to 2020. Furthermore, we selected the NUTS 3 region for the nations we were given, which were Portugal, France, Hungary, Slovakia and Denmark. Finally, we specified the data to be in million Euro.
+
+### GDP (nama_10r_3gdp)
+
+The nama_10r_3gdp dataset from Eurostat provides insights into GDP at regional level using the NUTS classification system. It furnishes GDP values in both current prices and adjusted for inflation, with some figures given in purchasing power standards (PPS) to account for price level differences between countries. The data is often structured by year and region @eurostat2023.
+
+The GDP at market prices represents the final result of production activities of resident producer units within a region or nation. It is calculated as the sum of the gross value added across various institutional sectors or industries, augmented by taxes and reduced by subsidies on products (which are not allocated to specific sectors or industries). This also balances out in the total economy production account. In terms of methodology, while national accounts compile GDP from the expenditure side, regional accounts don't adopt this approach due to the complexities of accurately mapping inter-regional flows of goods and services.
+
+The different measures for the regional GDP are absolute figures in € and Purchasing Power Standards (PPS), figures per inhabitant and relative data compared to the EU Member States average @eurostat2023c.
+
+### Population (demo_r_pjanggr3)
+
+Using the NUTS categorization once more, Eurostat's demo_r_pjanggr3 records annual population changes at the regional level. This dataset includes information on births, deaths, net migration, and may also include demographic information on age and gender. It's also often displayed in a year-by-region format, and the data usually spans in yearly intervals @eurostat2023a.
+
+Eurostat's primary source for yearly demographic data at the regional level stems from the Unified Demography (Unidemo) project. The project covers 37 countries and is the central repository for demographic and migration-related data. Specific metrics gathered under UNIDEMO encompass population counts at the close of the calendar year and events such as births and deaths occurring within that year. Additionally, data on marriages, divorces, and migration flows are recorded.
+
+For the purpose of this research, the demographic data references the NUTS 2016 classification, which provides a detailed breakdown of the European Union's territory @eurostat2021.
+
+### NUTS classification
+
+The Nomenclature of Territorial Units for Statistics (NUTS) offers a stratified system to segment the economic territory of the EU (including the UK) to facilitate the consistent collection and harmonization of regional statistics across Europe. The NUTS regions range from NUTS 0 Country level to NUTS 3 small units such as municipalities level.  
 
 ```{r}
 #| echo: false
-2 * 2
+#| output: false
+
+# This section of the code is dedicated to adding data to RStudio. We will import the datasets into the RStudio environment for further analysis, manipulation, and visualization using R.
+
+# Data for population
+pop_data <- read_csv("Raw_data/demo.gz")
+
+# Data for GDP
+gdp_data <- read_csv("Raw_data/nama.gz")
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+#| echo: false
+#| output: false
+# Renaming and selecting the variables we want to keep
+# We're doing this in order to make the datasets more clean and easy to read
+
+gdp_data_01 <- gdp_data |>
+  select(geo, year = TIME_PERIOD, GDP = OBS_VALUE)
+
+pop_data_01 <- pop_data |>
+  select(geo, year = TIME_PERIOD, population = OBS_VALUE)
+```
+
+## GDP per Capita Calculation
+
+The formula for calculating GDP per Capita is as follows:
+
+$y_i=GDP_i/population_i$
+
+```{r}
+#| echo: false
+#| output: false
+
+# Merging the datasets pop_data and gdp_data into one dataset by joining the variables "geo" and "year". 
+
+merged_data <- left_join(pop_data_01, gdp_data_01, join_by(geo, year))
+
+# Select Only NUTS 3 Regions
+# Filter for specific countries, this will be useful when we will find the GDP per capita for the countries seperately
+
+merged_data <- merged_data |>
+  filter(
+    startsWith(as.character(geo), "PT") | 
+    startsWith(as.character(geo), "FR") | 
+    startsWith(as.character(geo), "HU") |
+    startsWith(as.character(geo), "SK") | 
+    startsWith(as.character(geo), "DK")
+  ) %>%
+  
+# Filter rows where 'geo' column has more than 4 characters to select only NUTS3 regions
+  filter(nchar(as.character(geo)) > 4) %>%
+  
+# Rename 'geo' column to 'id_nuts3'
+  rename(id_nuts3 = geo)
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Calculating GDP per Capita
+
+GDP_per_capita <- merged_data |>
+  mutate(
+    GDP_per_capita = round(100*GDP/population, digits = 2)
+  )
+
+# we use *100 in order to get the gdp per capita as a percentage, and digits = 2 to limit it down to two decimals
+```
+
+After calculating the GDP per capita for all NUTS 3 regions in our assigned countries, we can see that there is a large spread between the figures for the various regions. In this assignement we want to look at regional inequity; in order to do this in a valuable way we have to divide between the different countries. By doing this, we can gain important insights on regional differences that we can utilize, for instance, to discuss national policy on equity and sustainable economic development in regions.
+
+### Descriptive statistics
+
+In this part we will report and interpret different types of essential descriptive statistics. Measuring regional income inequality is challenging due to heterogeneity of regions. The number of regions in our data set varies largely in size and population. Since the focus of this paper is purely growth and changes in inequities over time, the variations of size and population density becomes a minor issue because the country-level territorial heterogeneity is fixed.
+
+"Interest in income inequality has led to the development of several ways of measuring it. Two types of measures are of interest in this paper----static and dynamic. *Static measures* provide a snapshot of these inequalities at a point of time whereas the dynamic *measures capture historical trends.*" (læreboken)
+
+In this part, we'll look at GDP per capita for our assigned countries on a NUTS 3 level. In addition, we'll use different kinds of descriptive statistics in order to further 0,37, is analyse this data. In this analysis, we'll use @wooldridge2020 for help.
+
+By using figures, we can visualize the GDP per capita, and look at how it varies among the different regions. In these figures, a line represent one NUTS 3 region.
+
+**Mean**
+
+Calculate the mean to provide a representative value for a dataset, facilitating understanding of its central tendency and serving as a benchmark against which deviations and anomalies can be assessed, in later steps when building and interpreting regression models.
+
+**MMR**
+
+A comparison of the GRDP (gross regional domestic product) per capita of the region with the highest income to the region with the lowest income (minimum per capita GRDP) provides a measure of the range of these disparities. If this measure is small (close to 1), then it would mean that the different regions have relatively equal incomes. If this measure is large, then the interpretation is more problematic, as it does not tell us if the high ratio is due to substantial variation in the distribution of per capita GDRPs or the presence of outliers. Nevertheless, maximum to minimum ratio (MMR) provides a quick, easy to comprehend, and politically powerful measure of regional income inequality.
+
+**Standard diviation (SD)**
+
+Calculating SD to quantify the dispersion or variability of a data set around its mean. Helping us assess the degree of uncertainty, variability, or risk associated with an economic variable or parameter, which is crucial for understanding the reliability of estimations and predictions [@wooldridge2020].
+
+**Median**
+
+The median serves as a robust measure of central tendency, especially when a dataset may have outliers or is skewed. Unlike the mean, the median is not influenced by extreme values and, thus, can provide a clearer picture of the "typical" value in situations where the data distribution is not symmetrical [@wooldridge2020].
+
+### Portugal
+
+```{r}
+#| echo: false
+#| output: false
+
+# Making a dataset that only contains data from Portugal
+# Use the na.omit function in order to remove NA values, cant make ggplot with NA values. 
+
+Portugal_data <- GDP_per_capita |>
+  filter(grepl("PT", id_nuts3)) |>
+  na.omit(Portugal_data)
+```
+
+```{r}
+#| echo: false
+
+# Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Portugal. 
+
+Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
+  geom_line() +
+  labs(title="Figure 1: GDP per Capita for Portugal", 
+       x="Year",
+       y="GDP per Capita") +
+  theme(legend.position="none")
+
+# Print out the figure
+
+print(Portugal_data_plot)
+```
+
+```{r}
+#| echo: false
+
+# Calculate summary statistics for Portugal, chosing only GDP per capita 
+summary_stats_portugal <- sapply(Portugal_data["GDP_per_capita"], function(x) c(
+  mean = mean(x),
+  median = median(x),
+  std_dev = sd(x),
+  minimum = min(x),
+  maximum = max(x)
+))
+
+# Print the summary statistics
+print(summary_stats_portugal)
+```
+
+By looking at figure for Portugal, we can see that the GDP per capita in Portugal's regions appears to be fairly consistent. There is however some regional variability. We can see that the regions around the big cities like Lisbon have a higher GDP per capita compared to some more rural areas. Since Lisbon is the capital of Portugal, there is probably a higher concentration of industries, making it a economic center (which again makes the GDP per capita higher).
+
+To continue, we can see that the mean is a little higher that the median, something that might indicate that regions like Lisbon are pulling up the average. If we compare the standard derivation for Portugal with the other countries, we'll see that is fairly low in comparison. This might mean that there is not a lot of variability between the GDP per capita across different regions in Portugal. The gap between minimum and maximum is also low compared to other countries, something that'll also show us that the economic disparity in Portugal might not be as high as it is in other countries.
+
+### France
+
+```{r}
+#| echo: false
+#| output: false
+
+# Making a dataset that only contains data from France
+
+France_data <- GDP_per_capita |>
+  filter(grepl("FR", id_nuts3)) |>
+  na.omit(France_data)
+```
+
+```{r}
+#| echo: false
+
+# Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in France. 
+
+France_data_plot <- ggplot(France_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
+  geom_line() +
+  labs(title="Figure 1: GDP per Capita for France", 
+       x="Year",
+       y="GDP per Capita") +
+  theme(legend.position="none")
+
+print(France_data_plot)
+```
+
+```{r}
+#| echo: false
+
+# Calculate summary statistics for France, chosing only GDP per capita 
+summary_stats_france <- sapply(France_data["GDP_per_capita"], function(x) c(
+  mean = mean(x),
+  median = median(x),
+  std_dev = sd(x),
+  minimum = min(x),
+  maximum = max(x)
+))
+
+# Print the summary statistics
+print(summary_stats_france)
+```
+
+When looking at the figure for France, we can right away see that there are some regions that have a much higher GDP per capita compared to the other regions. The region that has the highest GDP per capita for all years is the île-de-France region, one that also includes Paris. This significant difference between the regions with the highest GDP per capita and the lowest, shows us that there is a high concentration of economic activity and wealth in a few urban regions. Similar to Portugal, we can also again see that there is a difference between urban and rural regions.
+
+Just as in Portugal, there is also a higher mean in France as well. Something that is different from the data in France compared to Portugal, is that the standard derivation is higher, and the difference between minimum and maximum is large. This strengthens what we have look at earlier in the figure, with some regions having a high concentration of wealth.
+
+### Hungary
+
+```{r}
+#| echo: false
+#| output: false
+
+# Making a dataset that only contains data from Hungary
+
+Hungary_data <- GDP_per_capita |>
+  filter(grepl("HU", id_nuts3)) |>
+  na.omit(Hungary_data)
+```
+
+```{r}
+#| echo: false
+
+# Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Hungary. 
+
+Hungary_data_plot <- ggplot(Hungary_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
+  geom_line() +
+  labs(title="Figure 1: GDP per Capita for Hungary", 
+       x="Year",
+       y="GDP per Capita") +
+  theme(legend.position="none")
+
+print(Hungary_data_plot)
+```
+
+```{r}
+#| echo: false
+
+# Calculate summary statistics for Hungary, chosing only GDP per capita 
+summary_stats_hungary <- sapply(Hungary_data["GDP_per_capita"], function(x) c(
+  mean = mean(x),
+  median = median(x),
+  std_dev = sd(x),
+  minimum = min(x),
+  maximum = max(x)
+))
+
+# Print the summary statistics
+print(summary_stats_hungary)
+```
+
+In Hungary, most of the regions have similar GDP per Capita. One region that sticks out by having a higher value, is the region of Budapest, Hungary's biggest city.
+
+We have here as well an mean that is larger than the median, high standard derivation, and a large gap between minimum and maximum.
+
+### Slovakia
+
+```{r}
+#| echo: false
+#| output: false
+
+# Making a dataset that only contains data from Slovakia
+
+Slovakia_data <- GDP_per_capita |>
+  filter(grepl("SK", id_nuts3)) |>
+  na.omit(Slovakia_data)
+```
+
+```{r}
+#| echo: false
+
+# Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Slovakia. 
+
+Slovakia_data_plot <- ggplot(Slovakia_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
+  geom_line() +
+  labs(title="Figure 1: GDP per Capita for Slovakia", 
+       x="Year",
+       y="GDP per Capita") +
+  theme(legend.position="none")
+
+print(Slovakia_data_plot)
+```
+
+```{r}
+#| echo: false
+
+# Calculate summary statistics for Slovakia, chosing only GDP per capita 
+summary_stats_slovakia <- sapply(Slovakia_data["GDP_per_capita"], function(x) c(
+  mean = mean(x),
+  median = median(x),
+  std_dev = sd(x),
+  minimum = min(x),
+  maximum = max(x)
+))
+
+# Print the summary statistics
+print(summary_stats_slovakia)
+```
+
+In Slovakia as well, we have one region that has a much higher GDP per capita than the rest of the regions. This region is Bratislava, which is the biggest city and capital, something that might point to this city being the economic capital of Slovakia as well.
+
+Slovakia has also a mean higher that the median, and a large gap between minimum and maximum. In addition, the standard derivation is pretty high, meaning that there is some regions (or one region in this case) that is far away from the rest of the regions when it comes to economic development.
+
+### Denmark
+
+```{r}
+#| echo: false
+#| output: false
+
+# Making a dataset that only contains data from Denmark
+
+Denmark_data <- GDP_per_capita |>
+  filter(grepl("DK", id_nuts3)) |>
+  na.omit(Denmark_data)
+```
+
+```{r}
+#| echo: false
+
+# Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Denmark. 
+
+Denmark_data_plot <- ggplot(Denmark_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
+  geom_line() +
+  labs(title="Figure 1: GDP per Capita for Denmark", 
+       x="Year",
+       y="GDP per Capita") +
+  theme(legend.position="none")
+
+print(Denmark_data_plot)
+```
+
+```{r}
+#| echo: false
+
+# Calculate summary statistics for Denmark, chosing only GDP per capita 
+summary_stats_denmark <- sapply(Denmark_data["GDP_per_capita"], function(x) c(
+  mean = mean(x),
+  median = median(x),
+  std_dev = sd(x),
+  minimum = min(x),
+  maximum = max(x)
+))
+
+# Print the summary statistics
+print(summary_stats_denmark)
+```
+
+Lastly, we have Denmark. We can see similar pattern here as well, with the capital Copenhagen being one of the regions with the highest GDP per capita.
+
+We can also see the same as the previous countries, with the mean being higher than the median, which shows us that regions like Copenhagen might drag the mean up by being much larger than the rest of the regions.
+
+# Part B: Regional Inequity
+
+## Gini Coefficient Calculation
+
+With the use of the NUTS3 GDP per capita data and this formula:
+
+$GINW_j=\frac{1}{2 \bar{y_j}} \sum_{i}^{n_j}\sum_{l}^{n_j}\frac{p_i}{P_j} \frac{p_l}{P_j} |y_i-y_l|$
+
+we will compute the population-weighted GDP Gini coefficient for each European NUTS2 region in our assigned countries.
+
+The gini coefficient can help us measure inequality in a distribution, as is therefore a useful tool for us to use when we look at regional inequity. The closer the gini coefficient is to 1, the bigger the inequality is; a number closer to 0 equals equality. When looking at the gini coefficient for NUTS 2 regions, we also get a better overview over differences in income between different regions, and it also makes it easier to find the reasons as to why there is a difference between the regions @hasell2023.
+
+```{r}
+#| echo: false
+#| output: false
+
+# Before we can find the Gini coefficient for NUTS2 regions, we have to generate NUTS 2 and 0 identifiers
+
+# Generate NUTS 2 and 0 Identifiers
+main_data <- GDP_per_capita |> 
+  mutate(
+    id_nuts2 = substr(id_nuts3, 1, 4),
+    id_nuts0 = substr(id_nuts3, 1, 2)
+  ) 
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Calculating gini
+gini <- main_data |>
+  filter(population != 0) |>
+  filter(population != "NA") |>
+  filter(GDP_per_capita != 0) |>
+  filter(GDP_per_capita != "NA") |>
+  group_by(id_nuts2, year) |>
+  mutate(gini_n2 = gini.wtd(GDP_per_capita, weights = population)) |>
+  ungroup()
+
+
+# Slice function to remove numbers that get repeated. 
+gini_nuts_2 <- gini |>
+  group_by(id_nuts2, year) |>
+  slice(1) |>
+  ungroup()
+
+# Since some NUTS 2 and 3 regions are the same (like Copenhagen for example), some gini coefficients will be 0. We should remove them before doing further analysis and data presentation
+
+# Filter data
+gini_filtered <- gini_nuts_2 |>
+  filter(gini_n2 != 0)
+```
+
+After calculating the gini coefficients, we can see that there are some similarities to the data we got from GDP per capita for NUTS 3 regions. In order to see these similarities better, as well as look for other important aspects that can be provided trough the calculations, we will visualize the data in three different ways.
+
+```{r}
+#| echo: false
+
+# Creating a bar chart
+ggplot(gini_filtered, aes(x = id_nuts2, y = gini_n2, fill = id_nuts0)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Gini Coefficient by NUTS 2 Region") +
+  xlab("NUTS 2 Region ID") +
+  ylab("Gini Coefficient") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+#| echo: false
+
+# Creating a time-series plot
+ggplot(gini_filtered, aes(x = year, y = gini_n2, color = id_nuts2)) +
+  geom_line() +
+  ggtitle("Time-series Plot of Gini Coefficient by NUTS 2 Region") +
+  xlab("Year") +
+  ylab("Gini Coefficient")
+```
+
+```{r}
+#| echo: false
+
+# Creating a box plot
+ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
+  geom_boxplot() +
+  ggtitle("Distribution of GDP per Capita by Country") +
+  xlab("Country") +
+  ylab("GDP per Capita")
+```
+
+## Discussion
+
+# References
