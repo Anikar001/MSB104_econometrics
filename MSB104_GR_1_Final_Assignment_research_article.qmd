@@ -129,6 +129,8 @@ The median serves as a robust measure of central tendency, especially when a dat
 
 ### **Time series (Panel data)**
 
+### Cross sectional analysis
+
 ### Simple linear regression
 
 ### Multiple linear regression
@@ -182,9 +184,9 @@ GDP_per_capita <- merged_data |>
 # we use *100 in order to get the gdp per capita as a percentage, and digits = 2 to limit it down to two decimals
 ```
 
-After calculating the GDP per capita for all NUTS 3 regions countries, we can see that there is a large spread between the figures for the various regions. We want to look at regional inequity; in order to do this in a valuable way, countries are divide. Furthermore, gaining important insights on regional differences and utilize. Later to discuss national policy on equity and sustainable economic development in regions.
+After calculating the GDP per capita for all NUTS 3 regions within the chosen countries, we can see that there is a large spread between the figures for the various regions. We want to look at regional inequity; in order to do this in a valuable way, countries are divide. Furthermore, gaining important insights on regional differences and utilize. Later to discuss national policy on equity and sustainable economic development in regions.
 
-# 
+### Portugal
 
 ```{r}
 #| echo: false
