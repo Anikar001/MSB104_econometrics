@@ -491,6 +491,8 @@ ggplot(gini_filtered, aes(x = id_nuts2, y = gini_n2, fill = id_nuts0)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+...
+
 ```{r}
 #| echo: false
 
@@ -501,6 +503,8 @@ ggplot(gini_filtered, aes(x = year, y = gini_n2, color = id_nuts2)) +
   xlab("Year") +
   ylab("Gini Coefficient")
 ```
+
+...
 
 ```{r}
 #| echo: false
@@ -513,6 +517,28 @@ ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
   ylab("GDP per Capita")
 ```
 
+...
+
 ## Discussion
 
-# References
+What does the GINI really tell us? (Look at paper from page 116)
+
+# Assignment 2: Cross-sectional Estimates
+
+## 2A: Growth and Inequity
+
+### 1. Model Estimation
+
+```{r}
+data2010_nuts2 <- gini_nuts_2 %>%
+ group_by(id_nuts2, year) %>%
+ mutate( gdp_n2 = sum(GDP, na.rm = T),
+ pop_n2 = sum(population, na.rm = T),
+GDP_per_capita = gdp_n2/pop_n2) %>%
+ ungroup() %>%
+ distinct(year, id_nuts0, id_nuts2, GDP_per_capita, gini_n2, gdp_n2, pop_n2) %>% 
+  filter(year == 2010, gini_n2 > 0)
+
+data2010_nuts2 <- data2010_nuts2 %>% 
+  mutate(log_GDP_pc = log(GDP_per_capita))
+```
