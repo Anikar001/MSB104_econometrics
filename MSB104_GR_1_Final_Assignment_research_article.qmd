@@ -4,7 +4,7 @@ author: "Anine Therese Karlsen & Mona Lisa Jones"
 format: pdf
 abstract: "This assignment aims to acquire, process, and analyze sub-national GDP and population data for a subset of European countries. Firstly (assignment 1), Calculateing GDP per capita and exploreing regional inequity using various descriptive statistics and visualizations.Secondly (assignment 2), examining the relationship between regional development and inequality, employing cross sectional estimation techniques for the year 2010."
 editor: visual
-bibliography: [Regional_inequality_23.bib]
+bibliography: [Regional_inequality_23.bib, econometrics.bib]
 output-file: Assignment1.qmd
 page-layout: full
 number-sections: true
