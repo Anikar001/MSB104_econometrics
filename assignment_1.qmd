@@ -23,6 +23,13 @@ library(magrittr)
 library(vtable)
 library(lubridate)
 library(dineq)
+library(vtable)
+library(dineq)
+library(dplyr)
+library(huxtable)
+library(lmtest)
+library(plm)
+library(readr) 
 ```
 
 # Introduction
@@ -491,6 +498,8 @@ ggplot(gini_filtered, aes(x = id_nuts2, y = gini_n2, fill = id_nuts0)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+...
+
 ```{r}
 #| echo: false
 
@@ -501,6 +510,8 @@ ggplot(gini_filtered, aes(x = year, y = gini_n2, color = id_nuts2)) +
   xlab("Year") +
   ylab("Gini Coefficient")
 ```
+
+...
 
 ```{r}
 #| echo: false
@@ -513,6 +524,221 @@ ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
   ylab("GDP per Capita")
 ```
 
+...
+
 ## Discussion
 
-# References
+What does the GINI really tell us? (Look at paper from page 116)
+
+# Assignment 2: Cross-sectional Estimates
+
+## 2A: Growth and Inequity
+
+## **I. Data Collection**
+
+```{r}
+#using R and the dplyr package to manipulate a dataset and calculate GDP per capita at the NUTS2 region level for the year 2010
+
+#GDP_Per_Capita_NUTS2 <- GDP_Per_Capita %>%
+  #filter(Year == 2010) %>%
+  #select(Year, Population, GDP, NUTS2, GINI_NUTS2, NUTS) %>%
+  #group_by(NUTS2, Year) %>%
+  #mutate(GDP_NUTS2 = sum(GDP), Population_NUTS2 = sum(Population)) %>%
+  #ungroup() %>%
+  #distinct(NUTS, NUTS2, Year, GDP_NUTS2, Population_NUTS2, GINI_NUTS2) %>%
+  #mutate(GDP_capita_NUTS2 = (GDP_NUTS2 * 1000000)/Population_NUTS2)
+
+   
+```
+
+```{r}
+
+#using R and the dplyr package to load and manipulate three different datasets related to demographics, transport infrastructure, and education at the NUTS2 regional level. Below is a breakdown of the steps and transformations you are performing on each dataset:
+
+
+
+#Demographics_NUTS2 <- read.csv('demo_r_mlifexp__custom_3767848_linear.csv') %>%
+  #select(geo, TIME_PERIOD, OBS_VALUE) %>%
+  #mutate(Life_expectency = OBS_VALUE, Year = TIME_PERIOD, NUTS2 = geo) %>%
+  #select(NUTS2, Year, Life_expectency)
+
+#Trans_infrastructure_NUTS2 <- read.csv('tran_r_net__custom_3761027_linear.csv') %>%
+  #select(geo, TIME_PERIOD, OBS_VALUE, tra_infr) %>%
+  #mutate(Number_of_MWAY_and_RL = OBS_VALUE, Year = TIME_PERIOD, NUTS2 = geo, #MWAY_or_RL = tra_infr) %>%
+  #select(NUTS2, Year, MWAY_or_RL, Number_of_MWAY_and_RL)
+
+#Education_NUTS2 <- read.csv('edat_lfse_04__custom_3767870_linear.csv') %>%
+  #filter(age == "Y25-64") %>%
+  #select(geo, TIME_PERIOD, OBS_VALUE) %>%
+  #mutate(Tertiary_educ = OBS_VALUE, Year = TIME_PERIOD, NUTS2 = geo) %>%
+  #select(NUTS2, Year, Tertiary_educ)
+```
+
+```{r}
+#Integrating different datasets into a comprehensive dataframe named Inequity_Data, and subsequently creating separate dataframes for specific countries based on their NUTS (Nomenclature of Units for Territorial Statistics) codes and the year 2010. Here's a breakdown of the code:
+
+Inequity_Data <- GDP_Per_Capita_NUTS2 %>%
+  left_join(Education_NUTS2, by = c("Year", "NUTS2")) %>%
+  left_join(Demographics_NUTS2, by = c("Year", "NUTS2")) %>%
+  left_join(Trans_infrastructure_NUTS2, by = c("Year", "NUTS2")) %>%
+  mutate(log_GDP_capita_NUTS2 = log(GDP_capita_NUTS2)) %>%
+  filter(Year == 2010 & GINI_NUTS2 > 0)
+
+AT2010 <- Inequity_Data %>%
+  filter(NUTS == "PT")
+BE2010 <- Inequity_Data %>%
+  filter(NUTS == "FR")
+BG2010 <- Inequity_Data %>%
+  filter(NUTS == "HU")
+HR2010 <- Inequity_Data %>%
+  filter(NUTS == "SK")
+IT2010 <- Inequity_Data %>%
+  filter(NUTS == "DK")
+```
+
+## **II Model specification**
+
+**Simple Linear Regression**
+
+```{r}
+#creating linear regression models for seven different datasets, each corresponding to a different country or the entire dataset, to analyze the relationship between regional inequality (measured by the GINI_NUTS2 variable) and per capita GDP (measured by the GDP_capita_NUTS2 variable) for the year 2010.
+
+#lm1 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = PT2010)
+#lm2 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = FR2010)
+#lm3 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = HU2010)
+#lm4 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = SK2010)
+#lm5 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = DK2010)
+#lm6 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = Inequity_Data)
+```
+
+Table XXX
+
+```{r}
+#using the huxreg() function to create a table summarizing the results of several linear regression models. The huxreg() function is typically used with the huxtable package in R, which is a tool for creating LaTeX and HTML tables from R objects.
+
+#huxreg(list("PT" = lm1, "FR" = lm2,  "HU" = lm3, "SK" = lm4, "DK" = lm5, "CC" = lm6), statistics = c(N = "nobs", R2 = "r.squared"), coefs = c(GDP_capita_NUTS2 = "GDP_capita_NUTS2", const. = "(Intercept)"), note = "Note: {stars} T statistics in brackets.")
+```
+
+PLOTTING
+
+```{r}
+#creating a scatter plot of the GINI_NUTS2 against GDP_capita_NUTS2 using data from Inequity_Data. In addition to the scatter plot, a regression line (calculated from a previous simple linear regression model, presumably) is added to the plot.
+
+#| label: fig-17
+#| fig-cap: "Gini & GDP per capita CC"
+#Inequity_Data %>%
+  #ggplot(aes(x = GDP_capita_NUTS2, y = GINI_NUTS2)) +
+  #geom_point(color = "maroon", alpha = 0.7) +
+  #geom_abline(intercept = b0_GDP_on_GINI_IT, slope = b1_GDP_on_GINI_IT, color = #"blue", alpha = 0.5) +
+  #labs(x = "GDP per Capita", y = "GINI") +
+  #theme_bw()
+
+```
+
+## **III. Residuales / model interpetation?**
+
+```{r}
+#predicting the GINI coefficient based on GDP per capita for all the regions in Inequity_Data using the lm_GDP_on_GINI model, and then adding these predicted values and residuals to the Inequity_Data dataframe.
+
+# Fit a simple linear regression model
+#lm_GDP_on_GINI <- lm(GINI_NUTS2 ~ GDP_capita_NUTS2, data = Inequity_Data)
+
+# Predict the GINI coefficient and add predictions and residuals to the dataframe
+#Inequity_Data$Predicted <- predict(lm_GDP_on_GINI)
+#Inequity_Data$Residuals <- residuals(lm_GDP_on_GINI)
+
+
+#Inequity_Data$Predicted <- predict(lm_GDP_on_GINI)
+#Inequity_Data$Residuals <- residuals(lm_GDP_on_GINI)
+```
+
+```{r}
+#| label: fig-18
+#| fig-cap: "Gini & GDP per capita CC with residuals"
+
+#predicting the GINI coefficient based on GDP per capita for all the regions in Inequity_Data using the lm_GDP_on_GINI model, and then adding these predicted values and residuals to the Inequity_Data dataframe.
+
+#Inequity_Data %>%
+  #distinct(NUTS2, GDP_capita_NUTS2, .keep_all = TRUE) %>%
+  #ggplot(aes(x = GDP_capita_NUTS2, y = GINI_NUTS2)) +
+  #geom_point(color = "maroon", alpha = 0.7) +
+  #geom_segment(aes(x = GDP_capita_NUTS2, xend = GDP_capita_NUTS2, y = GINI_NUTS2, #yend = Predicted), color = "red", alpha = 0.4) +
+                 #geom_abline(intercept = b0_GDP_on_GINI, slope = b1_GDP_on_GINI, color = "blue", alpha = 0.5) +
+                 #labs(x = "GDP per Capita", y = "GINI") + theme_bw()
+```
+
+## Other determinants of inequity
+
+```{r}
+
+#defines a function named MRM_NUTS2 that performs multiple linear regression analyses on a given dataset (mlrdata). This function creates five linear models, each with different sets of predictors, and then displays the summary of these models in a nicely formatted table using the huxreg function from the huxtable package.
+
+#MRM_NUTS2 <- function(mlrdata){
+  #lm8 = lm(GINI_NUTS2 ~ Tertiary_educ, mlrdata)
+  #lm9 = lm(GINI_NUTS2 ~ Number_of_MWAY_and_RL, mlrdata)
+  #lm10 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2 + Tertiary_educ + Number_of_MWAY_and_RL, #mlrdata)
+  #lm11 = lm(GINI_NUTS2 ~ Life_expectency, mlrdata)
+  #lm12 = lm(GINI_NUTS2 ~ GDP_capita_NUTS2 + Tertiary_educ + Life_expectency, #mlrdata)
+  
+  #huxreg(
+    #list("Model 1" = lm8, "Model 2" = lm9, "Model 3" = lm10, "Model 4" = lm11, "Model 5" = lm12), statistics = c(N = "nobs", R2 = "r.squared"), coefs = c(Higher.educ = "Tertiary_educ","Number_of_MWAY_and_RL", Life.expec = "Life_expectency", const. = "(Intercept)"),note = "Note: {stars} T statistics in brackets.")
+  
+```
+
+### MLR by country
+
+#### Portugal
+
+```{r}
+#| label: MRL Portugal
+#| tbl-cap: "MRM PT"
+#MRM_NUTS2(AT2010)
+```
+
+#### France
+
+```{r}
+#| label: MLR France
+#| tbl-cap: "MRM FR"
+MRM_NUTS2(AT2010)
+```
+
+#### Hungary
+
+```{r}
+#| label: MRL Hungary
+#| tbl-cap: "MRM AT"
+MRM_NUTS2(AT2010)
+```
+
+#### Slovakia
+
+```{r}
+#| label: MRL Slovakia
+#| tbl-cap: "MRM AT"
+MRM_NUTS2(AT2010)
+```
+
+#### Denmark
+
+```{r}
+#| label: MRL Denmark
+#| tbl-cap: "MRM AT"
+MRM_NUTS2(AT2010)
+```
+
+### 1. Model Estimation
+
+```{r}
+data2010_nuts2 <- gini_nuts_2 %>%
+ group_by(id_nuts2, year) %>%
+ mutate( gdp_n2 = sum(GDP, na.rm = T),
+ pop_n2 = sum(population, na.rm = T),
+GDP_per_capita = gdp_n2/pop_n2) %>%
+ ungroup() %>%
+ distinct(year, id_nuts0, id_nuts2, GDP_per_capita, gini_n2, gdp_n2, pop_n2) %>% 
+  filter(year == 2010, gini_n2 > 0)
+
+data2010_nuts2 <- data2010_nuts2 %>% 
+  mutate(log_GDP_pc = log(GDP_per_capita))
+```
