@@ -27,8 +27,6 @@ library(dineq)
 library(huxtable)
 ```
 
-Må fikse kilder!!
-
 # Introduction
 
 While national GDP and GDP per capita are vital indicators of a country's aggregate economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, paradoxically, coexist with pockets of regional deprivation [@lessmann2017].
@@ -531,138 +529,300 @@ ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
 
 ### 1. Model Estimation
 
-$\text{GDP per capita = } \beta_{0} + \beta_{1} \cdot GINI + \in$
+$GINI = \beta_{0} + \beta_{1} \cdot \text{GDP per capita} + \epsilon$
+
+Gini is the dependent variable (y), while GDP per capita is the independent variable (x).
 
 ```{r}
 #| echo: false
 #| output: false
 
-# Making a dataframe that only contains observations from 2010, also filter the data so that gini is bigger than 0. 
+# Making a dataframe that only contains observations from 2010, we're also filtering the data so that gini is bigger than 0. 
 
-data2010 <- gini_nuts_2 %>% filter(year == 2010, gini_n2 > 0)
+data2010 <- gini_nuts_2 |>
+  filter(year == 2010, gini_n2 > 0)
 ```
 
 ```{r}
 #| echo: false
-#| fig-cap: Descriptive statistics all countries for year 2010
+#| fig-cap: Regression statistics of all countries for the year 2010
 
 # Finding the natural logarithm of GDP per capita
 data2010 <- data2010 |> 
   mutate(log_GDP_per_capita = log(GDP_per_capita))
 
 
-# lm(y ~ x) y = GDP per capita, x = Gini, estimation
-lm_centered <- lm(gini_n2 ~ log_GDP_per_capita, data = data2010)
+# lm(y ~ x) y = gini, x = log of GDP per capita, estimation of linear regression model
+lm <- lm(gini_n2 ~ log_GDP_per_capita, data = data2010)
 
-#Save coefficients
-b0_earn <- lm_centered$coefficients[1]
-b1_earn <- lm_centered$coefficients[2]
+# Save coefficients
+b0_earn <- lm$coefficients[1]
+b1_earn <- lm$coefficients[2]
 
-# Descriptive statistics
-huxreg(All = lm_centered, statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+# Regression statistics by using huxreg
+huxreg(All = lm, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
 ```
 
 ```{r}
 #| echo: false
 #| output: false
-# må forklare denne!!
-plot(lm_centered, which = 1:4)
+
+# Summary
+summary(lm)
 ```
 
-β0​ = 0.0551 (intercept)
+Beta 0​ = 0.0551 (intercept)
 
-β1 = 0.0193 (slope coefficient)
+Beta 1 = 0.0193 (slope coefficient)
 
 ```{r}
 #| echo: false
-#| fig-cap: Descriptive statistics for all countries seperately for the year 2010
+#| fig-cap: Regression statistics of all countries seperately for the year 2010
 
-# Finding estimates for each country seperately 
+# Estimation for each country seperately 
 lmSK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "SK"))
 lmDK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "DK"))
 lmHU <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "HU"))
 lmPT <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "PT"))
 lmFR <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "FR"))
 
-# Descriptive statistics
-huxreg(SK = lmSK, DK = lmDK, HU = lmHU, PT = lmPT, FR = lmFR, statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+# Regression statistics
+huxreg(SK = lmSK, 
+       DK = lmDK, 
+       HU = lmHU, 
+       PT = lmPT, 
+       FR = lmFR, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Summary
+summary(lmSK)
+summary(lmDK)
+summary(lmPT)
+summary(lmFR)
+summary(lmHU)
 ```
 
 ### 2. Model Diagnostics
 
-Forklaring på statistikk for alle land samlet:
+We'll now look at some of the numbers we got from the linear regression model (for all countries combined):
 
-Forklaring på statistikk for land hver for seg:
+-   Coefficients:
+
+    -   Intercept is 0.0551 (expected value of gini when GDP per capita is 0). Statistically significant (indicated by p-value).
+
+    -   Estimated coefficient for GDP per capita is 0.0193, if the natural logarithm of GDP per capita increase by one, then the gini coefficient will increase by 0.0193. The p-value associated with the coefficent is however not statistically significant at 5% level.
+
+-   Goodnes of fit:
+
+    -   Multiple R-squared (0.08028) indicate that around 8% of the variability in the GINI coefficient is explained by the model. This is low, which can suggest that the model dosen't explain the variation in gini.
+
+    -   Adjusted R-squared is even lower (0.05474), is therefore expected that the model dosen't really explain the variance in the dependent variable (gini).
+
+-   Model significance:
+
+    -   The F-statistic (3.142) indicate the significance of the regression model. We can see here, that with the p-value of 0.08474, the model isn't significant at a 5% level.
+
+By looking at these numbers, we can see that the model may not reliably predict the gini coefficient. It also suggest that GDP per capita may not be a valid predictor of the gini coefficient.
+
+We also examined our selected countries seperately in order to see how the reliability and validity of the model might vary between countries. However, since there are too few observations for most of the countries, it makes it hard to make a conclusion of the reliability. What we can see from this examination, is that the models for Denmark, Portugal and Slovakia are not statistically significant. France seem however to have significant coefficiants, and Hungary have a moderate R-squared (but lacks significance in the slope).
 
 ### 3. Visualization
 
 ```{r}
 #| echo: false
 
+# Making two plots, first one is a residuals vs fitted plot, while the other is a normal Q-Q residuals plot
+plot(lm, which = 1:2) 
+```
+
+We've made two plots that can help us understand the relationship between GDP per capita and the Gini coefficient. The first one is a plot that shows us residuals vs fitted values, which can help us check the homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horisontal 0 line, something that can inducate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity.
+
+The other plot - normal Q-Q plot - is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed.
+
+In both of these plots, we can see that there are some outliers, these can affect the fit of the model. These outliers might come from regions that have a high GDP per capita compared to rest of the regions, like Paris in France that is a financial hub.
+
+The numbers we gathered earlier, as well as these plots, can help us explain and assert whether the classical OLS assumptions holds for our model:
+
+-   Linearity:
+
+    -   
+
+-   Independence:
+
+    -   
+
+-   Normality:
+
+    -   
+
+-   Homoscedasticity:
+
+    -   
+
+-   Multicollinearity:
+
+    -   
+
+```{r}
+#| echo: false
+#| label: fig_scatterplot-all
+#| cap-location: bottom
+#| fig-cap: "Relationship Between GDP per Capita and Gini"
+
 # Visualization of the relationship between GDP per capita and gini
-ggplot(data2010, aes(x = gini_n2, y = log_GDP_per_capita)) +
-  geom_point(aes(color = gini_n2), size = 3) +
+ggplot(data2010, aes(x = log_GDP_per_capita, y = gini_n2)) +
+  geom_point(aes(color = log_GDP_per_capita), size = 3) +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
   labs(
     title = "Relationship Between GDP per Capita and Gini",
-    x = "Gini",
-    y = "GDP per capita",
+    x = "GDP per capita",
+    y = "Gini",
     caption = "Red line indicates the fitted regression line"
   ) +
   theme_minimal()
-
 ```
 
-Forklaring på visualisering:
-
-Forklar hvorfor noen observasjoner er langt unna de andre observasjonene.
+In this plot we are visualizing the relationship between GDP per capita and gini by using a mix of the two previous plots. We can here as well, see extreme outliers.
 
 ## 2B: Exploring Other Determinants of Inequity
 
 ### 1. Data Acquistion
+
+In order to conduct a Multiple Linear Regression model, we need to have some independent variables to use in the model and compare them with the dependent variable. The first variable, education, can explain income inequality, since it can influence income distribution in a region. If access to education is unequal, then higher education levels might incease income disparities [@rodriguez-pose2008]. The population density, our second variable, can explain inequality since regions with a higher population density might have different economic behaviours. Our last variable, rail network (infrastructure), can influence economic development and accessibility, which also can affect income inequality in a region [@chatterjee2012].
 
 ```{r}
 #| echo: false
 #| output: false
 #| label: data acquistion
 
+# Importing datasets
+
 # Data for population density
-demo_dens_data <- read_csv("Raw_data/demo_dens.gz")
+demo_dens <- read_csv("Raw_data/demo_dens.gz")
 
 # Data for education
 educ_data <- read_csv("Raw_data/educ.gz")
 
 # Data for rail network
 rail_data <- read_csv("Raw_data/rail.gz")
+
+
+# Renaming and tidying up the new dataframes 
+demo_dens <- demo_dens %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, pop_density = OBS_VALUE)
+
+educ_data <- educ_data %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, students_percentage = OBS_VALUE)
+
+rail_data <- rail_data %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, rail_km = OBS_VALUE)
 ```
 
 ```{r}
 #| echo: false
 #| output: false
 
-# Cleaning up data frames
-demo_dens_data <- demo_dens_data |> 
-  select(nuts_2 = geo, pop_density = OBS_VALUE)
+# The NUTS 2 regions in France changed names in 2018. The dataset with education use the old codes while the other datasets use the new codes, we therefore had to change the names in order to be able to merge them together properly. 
 
-educ_data <- educ_data |> 
-  select(nuts_2 = geo, students_percentage = OBS_VALUE)
+# Changing NUTS 2 names for France
+nuts2_mapping <- c(
+  FR10 = "FR10",
+  FR21 = "FRF2",
+  FR22 = "FR22",
+  FR23 = "FRD2",
+  FR24 = "FRC1",
+  FR25 = "FRD2",
+  FR26 = "FRF2",
+  FR30 = "FR22",
+  FR41 = "FRF3",
+  FR42 = "FRF1",
+  FR43 = "FRF3",
+  FR51 = "FRG0",
+  FR52 = "FRH0",
+  FR53 = "FRI3",
+  FR61 = "FRI3",
+  FR62 = "FRJ2",
+  FR63 = "FRI3",
+  FR71 = "FRK2",
+  FR72 = "FRK1",
+  FR81 = "FRJ1",
+  FR82 = "FRL0",
+  FR83 = "FRM0"
+  )
 
-rail_data <- rail_data |> 
-  select(nuts_2 = geo, rail_km = OBS_VALUE)
+# Adding the new names to the dataset
+educ_fixed <- educ_data |>
+  mutate(id_nuts2 = recode(id_nuts2, !!!nuts2_mapping))
+
+# Selecting only the necessary columns
+demo_dens_selected <- select(demo_dens, year, id_nuts2, pop_density)
+educ_selected <- select(educ_fixed, year, id_nuts2, students_percentage)
+rail_selected <- select(rail_data, year, id_nuts2, rail_km)
+
+# Merging the datasets
+merged_datasets <- demo_dens_selected |>
+  left_join(educ_selected, by = c("year", "id_nuts2")) |>
+  left_join(rail_selected, by = c("year", "id_nuts2"))
+
+# Filter by year 2010
+merged_datasets_2010 <- merged_datasets |>
+  filter(year == 2010)
+
+# Merging with dataset containing GDP per capita and gini
+Merged_datasets_gini <- merged_datasets_2010 |>
+  left_join(data2010, by = c("year", "id_nuts2"))
+
+# cleaning dataset and selecting variables
+Merged_datasets_gini <- Merged_datasets_gini |>
+  select(year, id_nuts2, id_nuts0, gini_n2, GDP_per_capita, log_GDP_per_capita, students_percentage, pop_density, rail_km)
+
+# Removing NA values from gini_n2 
+Merged_datasets_gini <- Merged_datasets_gini |>
+  filter(!is.na(gini_n2))
+
+# Remove nuts 2 variables that gets repetead
+cleaned_data <- Merged_datasets_gini |>
+  distinct(id_nuts2, .keep_all = TRUE)
 ```
-
-```{r}
-merged_data_1 <- demo_dens_data %>%
-  inner_join(educ_data, by = 'nuts_2') %>%
-  inner_join(rail_data, by = 'nuts_2')
-```
-
-#### Population Density
-
-#### Education
-
-#### Rail Network
 
 ### 2. Multiple Linear Regression Model
 
+We will in this part do a Multiple Linear Regression model by using the variables education (in percentage of pupils and students in education, % of total population), population density and rail network in km. This model will tell us if these variables can help explain change in the gini coefficient.
+
+In both our simple linear regression model, and now in our multiple linear regression model, we use the logarithmic function which makes it easier to linearize the relationship between the variables. By using it for GDP per capita, we can reflect changes more effectively. For rail network and population density, the logarithm function ensure that the model capture proportional changes and deals better with the wide range of values.
+
+```{r}
+#| echo: false
+#| fig-cap: Multiple Linear Regression Model
+
+# Estimations with the help of several independent variables
+
+# To begin with, we'll look at how education can explain the gini coefficient
+lm1 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage, subset(cleaned_data))
+
+# Here we look at how both population density and education can explain the gini coefficient 
+
+lmdens1 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage + log(pop_density), subset(cleaned_data))
+
+# Lastly, we look at how all of our selected variables, rail, education and population density, can explain the gini coefficient
+
+lm2 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage + log(pop_density) + log(rail_km), subset(cleaned_data))
+
+# Regression statistics
+huxreg("Model" = lm1, 
+       "Model 2" = lmdens1, 
+       "Model 3" = lm2, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
 ### 3. Model Interpretation
+
+Our first model in the Multiple Linear Regression model examine how education in addition to GDP per capita can help explain the gini coefficient. The second model look at both education, GDP per capita, and population density, while the third model examine them all and also add rail network.
+
+## Conclusion
