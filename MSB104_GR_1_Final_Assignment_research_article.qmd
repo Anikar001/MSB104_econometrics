@@ -25,6 +25,7 @@ library(magrittr)
 library(vtable)
 library(lubridate)
 library(dineq)
+library(huxtable)
 ```
 
 # Introduction
@@ -579,8 +580,6 @@ Firstly, the data is summerised for the year 2010 at the NUTS2 regional level, f
 
 The next step is making a data frame of NUTS2 2010 and grouping by NUTS0 country level variables, as well as allocating NUTS2 to selected countries. Lastly presenting data in **table XXX** showing a count of NUTS2 regions within each top-level region or country in the 2010 data.
 
-**#Esempel:Looking at the descriptive statistics we see in average a very low level of inequality within all regions. Even at the maximum inequality is modest with 0.35 spacial in comparison with other countries, see for example Lessmann and Seidel ([2017](https://a10747-2033066.cluster215.canvas-user-content.com/courses/10747~22507/files/10747~2033066/course%20files/html/Assignments_example.html?context_id=10747~22507&context_type=Course&download=1&id=107470000002033066&inline=1#ref-lessmann2017regional)) for such a comparison.Studding the temporal component of our data we see that most regions follow a common trend in there level of inequality with modest changes over time. See for example the NUTS2 regions of France in [Figure 4](https://a10747-2033066.cluster215.canvas-user-content.com/courses/10747~22507/files/10747~2033066/course%20files/html/Assignments_example.html?context_id=10747~22507&context_type=Course&download=1&id=107470000002033066&inline=1#fig-regional_gini_time). There are however some severe exceptions ...#**
-
 The next step is, estimating a Linear Regression for All Countries using cross sectional data from 2010, NUTS2.
 
 ### **Cross Sectional Analysis**
@@ -621,6 +620,10 @@ $ε_i$ represents the residuals or error in the prediction.
 
 **Slope (**β1​): Indicates the change in Y for a one-unit change in X.
 
+For our model we have:
+
+$GINI = \beta_{0} + \beta_{1} \cdot \text{GDP per capita} + \epsilon$
+
 #### **Goodness of fit**
 
 The goodness of fit in a simple linear regression model measures how well the regression line approximates the real data points. The regression line that best represents the data according to the least squares criterion, which minimizes the sum of the squared vertical distances of the points from the line.
@@ -637,19 +640,86 @@ If the assumptions for a simple linear regression are met, it indicates a good f
 
 **Normal Q-Q Plot** to check if the residuals are approximately normally distributed. The points should fall roughly along a straight line. Deviations from a straight line suggest deviations from normality.
 
-**Scale-Location Plot** is another way to check for homoscedasticity. The spread of the residuals should be roughly the same across all levels of the fitted values. If the spread increases or decreases with the fitted values, it suggests heteroscedasticity.
+```{r}
+#| echo: false
+#| output: false
 
-**Residuals vs. Leverage Plot** to identify influential observations that might unduly influence the regression. Points with high leverage or large residuals (outliers) can be identified. Cook's distance lines may be added to help identify points that have a large influence on the model.
+# Making a dataframe that only contains observations from 2010, we're also filtering the data so that gini is bigger than 0. 
 
-## Part 2B: Exploring Other Determinants of Inequity
+data2010 <- gini_nuts_2 |>
+  filter(year == 2010, gini_n2 > 0)
+```
 
-### I. Data Acquisition
+```{r}
+#| echo: false
+#| fig-cap: Regression statistics of all countries for the year 2010
 
-Se data section for more specifications on the added population nut2, transport infrastructure and education.
+# Finding the natural logarithm of GDP per capita
+data2010 <- data2010 |> 
+  mutate(log_GDP_per_capita = log(GDP_per_capita))
 
-### II. Multiple Linear Regression Model
 
-Multiple Linear Regression (MLR) extends simple linear regression to incorporate multiple explanatory variables, allowing us to examine how multiple factors impact a dependent variable. Choosing a data set from the year 2010 that consists of various regions (FRANCE?), with data on each region's economic indicators, demographic variables, and other factors. Our aim is to understand how these variables collectively affect regional inequality.
+# lm(y ~ x) y = gini, x = log of GDP per capita, estimation of linear regression model
+lm <- lm(gini_n2 ~ log_GDP_per_capita, data = data2010)
+
+# Save coefficients
+b0_earn <- lm$coefficients[1]
+b1_earn <- lm$coefficients[2]
+
+# Regression statistics by using huxreg
+huxreg(All = lm, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Regression statistics of all countries seperately for the year 2010
+
+# Estimation for each country seperately 
+lmSK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "SK"))
+lmDK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "DK"))
+lmHU <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "HU"))
+lmPT <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "PT"))
+lmFR <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "FR"))
+
+# Regression statistics
+huxreg(SK = lmSK, 
+       DK = lmDK, 
+       HU = lmHU, 
+       PT = lmPT, 
+       FR = lmFR, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
+**Model Diagnostics**
+
+We'll now look at some of the numbers we got from the linear regression model (for all countries combined):
+
+-   Coefficients:
+
+    -   Intercept is 0.0551 (expected value of gini when GDP per capita is 0). Statistically significant (indicated by p-value).
+
+    -   Estimated coefficient for GDP per capita is 0.0193, if the natural logarithm of GDP per capita increase by one, then the gini coefficient will increase by 0.0193. The p-value associated with the coefficent is however not statistically significant at 5% level.
+
+-   Goodnes of fit:
+
+    -   Multiple R-squared (0.08028) indicate that around 8% of the variability in the GINI coefficient is explained by the model. This is low, which can suggest that the model dosen't explain the variation in gini.
+
+    -   Adjusted R-squared is even lower (0.05474), is therefore expected that the model dosen't really explain the variance in the dependent variable (gini).
+
+-   Model significance:
+
+    -   The F-statistic (3.142) indicate the significance of the regression model. We can see here, that with the p-value of 0.08474, the model isn't significant at a 5% level.
+
+By looking at these numbers, we can see that the model may not reliably predict the gini coefficient. It also suggest that GDP per capita may not be a valid predictor of the gini coefficient.
+
+We also examined our selected countries seperately in order to see how the reliability and validity of the model might vary between countries. However, since there are too few observations for most of the countries, it makes it hard to make a conclusion of the reliability. What we can see from this examination, is that the models for Denmark, Portugal and Slovakia are not statistically significant. France seem however to have significant coefficiants, and Hungary have a moderate R-squared (but lacks significance in the slope).
+
+**Ordinary Least Squares (OLS) Estimation**
+
+"The OLS method is employed to identify the best-fitting linear relationship between the dependent and independent variables, aiming to minimize the sum of squared residuals. This technique ensures that the estimations of the intercept (β0) and slope (β1) yield the least possible cumulative discrepancy between the actual and predicted values. The strength of OLS lies in its closed-form solution, providing a straightforward computation of coefficients directly from the data-set, without necessitating iterative procedures.
+
+Furthermore, when the classical linear regression assumptions are met, OLS guarantees that the estimators are BLUE, ensuring their unbiasedness and efficiency. This is particularly crucial in econometric analysis, where the precision and reliability of parameter estimates are paramount for policy implications and economic interpretations. The foundation assumptions of linear regression, including linearity, independence, homoscedasticity, and normality of residuals, are prerequisites for OLS to attain these desirable properties. It is imperative, therefore, to conduct diagnostic tests and assess the validity of these assumptions to ensure the robustness of the OLS estimators used in our analysis."
 
 ### **Assumptions**
 
@@ -683,6 +753,177 @@ In multiple regression settings, this assumes that no independent variable is a 
 
 Checking the variance inflation factor (VIF) for each variable; a VIF above 5-10 indicates a problematic amount of collinearity.
 
+**Visualization**
+
+```{r}
+#| echo: false
+
+# Making two plots, first one is a residuals vs fitted plot, while the other is a normal Q-Q residuals plot
+plot(lm, which = 1:2) 
+```
+
+We've made two plots that can help us understand the relationship between GDP per capita and the Gini coefficient, and that together with the regression statistics can help with discussing if the classical OLS assumptions hold for the model. The first one is a plot that shows us residuals vs fitted values, which can help us check the homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horisontal 0 line, something that can inducate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity.
+
+The other plot - normal Q-Q plot - is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed. There are however some outliers in the tails, that suggest some variation from normality.
+
+In both of these plots, we can see that there are some outliers, these can affect the fit of the model. These outliers might come from regions that have a high GDP per capita compared to rest of the regions, like Paris in France that is a financial hub.
+
+```{r}
+#| echo: false
+#| label: fig_scatterplot-all
+#| cap-location: bottom
+#| fig-cap: "Relationship Between GDP per Capita and Gini"
+
+# Visualization of the relationship between GDP per capita and gini
+ggplot(data2010, aes(x = log_GDP_per_capita, y = gini_n2)) +
+  geom_point(aes(color = log_GDP_per_capita), size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    title = "Relationship Between GDP per Capita and Gini",
+    x = "GDP per capita",
+    y = "Gini",
+    caption = "Red line indicates the fitted regression line"
+  ) +
+  theme_minimal()
+```
+
+In this plot we are visualizing the relationship between GDP per capita and gini by using a mix of the two previous plots. We can here as well, see extreme outliers.
+
+## Part 2B: Exploring Other Determinants of Inequity
+
+### I. Data Acquisition
+
+Se data section for more specifications on the added population nut2, transport infrastructure and education.
+
+In order to conduct a Multiple Linear Regression model, we need to have some independent variables to use in the model and compare them with the dependent variable. The first variable, education, can explain income inequality, since it can influence income distribution in a region. If access to education is unequal, then higher education levels might incease income disparities [@rodriguez-pose2008]. The population density, our second variable, can explain inequality since regions with a higher population density might have different economic behaviours. Our last variable, rail network (infrastructure), can influence economic development and accessibility, which also can affect income inequality in a region [@chatterjee2012].
+
+```{r}
+#| echo: false
+#| output: false
+#| label: data acquistion
+
+# Importing datasets
+
+# Data for population density
+demo_dens <- read_csv("Raw_data/demo_dens.gz")
+
+# Data for education
+educ_data <- read_csv("Raw_data/educ.gz")
+
+# Data for rail network
+rail_data <- read_csv("Raw_data/rail.gz")
+
+
+# Renaming and tidying up the new dataframes 
+demo_dens <- demo_dens %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, pop_density = OBS_VALUE)
+
+educ_data <- educ_data %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, students_percentage = OBS_VALUE)
+
+rail_data <- rail_data %>%
+  rename(year = TIME_PERIOD, id_nuts2 = geo, rail_km = OBS_VALUE)
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# The NUTS 2 regions in France changed names in 2018. The dataset with education use the old codes while the other datasets use the new codes, we therefore had to change the names in order to be able to merge them together properly. 
+
+# Changing NUTS 2 names for France
+nuts2_mapping <- c(
+  FR10 = "FR10",
+  FR21 = "FRF2",
+  FR22 = "FR22",
+  FR23 = "FRD2",
+  FR24 = "FRC1",
+  FR25 = "FRD2",
+  FR26 = "FRF2",
+  FR30 = "FR22",
+  FR41 = "FRF3",
+  FR42 = "FRF1",
+  FR43 = "FRF3",
+  FR51 = "FRG0",
+  FR52 = "FRH0",
+  FR53 = "FRI3",
+  FR61 = "FRI3",
+  FR62 = "FRJ2",
+  FR63 = "FRI3",
+  FR71 = "FRK2",
+  FR72 = "FRK1",
+  FR81 = "FRJ1",
+  FR82 = "FRL0",
+  FR83 = "FRM0"
+  )
+
+# Adding the new names to the dataset
+educ_fixed <- educ_data |>
+  mutate(id_nuts2 = recode(id_nuts2, !!!nuts2_mapping))
+
+# Selecting only the necessary columns
+demo_dens_selected <- select(demo_dens, year, id_nuts2, pop_density)
+educ_selected <- select(educ_fixed, year, id_nuts2, students_percentage)
+rail_selected <- select(rail_data, year, id_nuts2, rail_km)
+
+# Merging the datasets
+merged_datasets <- demo_dens_selected |>
+  left_join(educ_selected, by = c("year", "id_nuts2")) |>
+  left_join(rail_selected, by = c("year", "id_nuts2"))
+
+# Filter by year 2010
+merged_datasets_2010 <- merged_datasets |>
+  filter(year == 2010)
+
+# Merging with dataset containing GDP per capita and gini
+Merged_datasets_gini <- merged_datasets_2010 |>
+  left_join(data2010, by = c("year", "id_nuts2"))
+
+# cleaning dataset and selecting variables
+Merged_datasets_gini <- Merged_datasets_gini |>
+  select(year, id_nuts2, id_nuts0, gini_n2, GDP_per_capita, log_GDP_per_capita, students_percentage, pop_density, rail_km)
+
+# Removing NA values from gini_n2 
+Merged_datasets_gini <- Merged_datasets_gini |>
+  filter(!is.na(gini_n2))
+
+# Remove nuts 2 variables that gets repetead
+cleaned_data <- Merged_datasets_gini |>
+  distinct(id_nuts2, .keep_all = TRUE)
+```
+
+### II. Multiple Linear Regression Model
+
+Multiple Linear Regression (MLR) extends simple linear regression to incorporate multiple explanatory variables, allowing us to examine how multiple factors impact a dependent variable. Choosing a data set from the year 2010 that consists of various regions, with data on each region's economic indicators, demographic variables, and other factors. Our aim is to understand how these variables collectively affect regional inequality.
+
+We will in this part do a Multiple Linear Regression model by using the variables education (in percentage of pupils and students in education, % of total population), population density and rail network in km. This model will tell us if these variables can help explain change in the gini coefficient.
+
+In both our simple linear regression model, and now in our multiple linear regression model, we use the logarithmic function which makes it easier to linearize the relationship between the variables. By using it for GDP per capita, we can reflect changes more effectively. For rail network and population density, the logarithm function ensure that the model capture proportional changes and deals better with the wide range of values.
+
+```{r}
+#| echo: false
+#| fig-cap: Multiple Linear Regression Model
+
+# Estimations with the help of several independent variables
+
+# To begin with, we'll look at how education can explain the gini coefficient
+lm1 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage, subset(cleaned_data))
+
+# Here we look at how both population density and education can explain the gini coefficient 
+
+lmdens1 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage + log(pop_density), subset(cleaned_data))
+
+# Lastly, we look at how all of our selected variables, rail, education and population density, can explain the gini coefficient
+
+lm2 <- lm(gini_n2 ~ log_GDP_per_capita + students_percentage + log(pop_density) + log(rail_km), subset(cleaned_data))
+
+# Regression statistics
+huxreg("Model" = lm1, 
+       "Model 2" = lmdens1, 
+       "Model 3" = lm2, 
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
 ### Model specification
 
 **Understanding the Coefficients**
@@ -691,45 +932,17 @@ Intercept beta_0 Represents the expected value of the dependent variable when al
 
 Slope Coefficients beta_1, beta_2, \..., \\beta_k \\))\*\*: Represent the expected change in the dependent variable for a one-unit change in the respective independent variable, holding all other variables constant.
 
-### Ordinary Least Squares (OLS) Estimation
-
-"The OLS method is employed to identify the best-fitting linear relationship between the dependent and independent variables, aiming to minimize the sum of squared residuals. This technique ensures that the estimations of the intercept (β0) and slope (β1) yield the least possible cumulative discrepancy between the actual and predicted values. The strength of OLS lies in its closed-form solution, providing a straightforward computation of coefficients directly from the data-set, without necessitating iterative procedures.
-
-Furthermore, when the classical linear regression assumptions are met, OLS guarantees that the estimators are BLUE, ensuring their unbiasedness and efficiency. This is particularly crucial in econometric analysis, where the precision and reliability of parameter estimates are paramount for policy implications and economic interpretations. The foundation assumptions of linear regression, including linearity, independence, homoscedasticity, and normality of residuals, are prerequisites for OLS to attain these desirable properties. It is imperative, therefore, to conduct diagnostic tests and assess the validity of these assumptions to ensure the robustness of the OLS estimators used in our analysis."
-
-#### **Model Validation with Cross-Sectional Data**
-
-~~- \*\*Residual Analysis\*\*: Examine residuals for patterns to check for violations of linearity, independence, and homoscedasticity.~~
-
-~~- \*\*Outlier and Influence Diagnostics\*\*: Identify regions with high leverage or large residuals to ensure they are not disproportionately affecting the model.~~
-
-~~- \*\*Multicollinearity\*\*: Given that MLR includes multiple predictors, check for multicollinearity to ensure that the predictors are not too highly correlated with each other.~~
-
-~~\#### \*\*Predictive Power and Goodness of Fit\*\*~~
-
-~~- \*\*\\( R\^2 \\) and Adjusted \\( R\^2 \\)\*\*: Provide information on how well the independent variables explain the variation in the dependent variable.~~
-
-~~- \*\*F-Test\*\*: Tests whether at least one of the independent variables is statistically significant in explaining variation in the dependent variable.~~
-
-~~\#### \*\*Conclusion\*\*~~
-
-~~- The multiple linear regression model, estimated using OLS, allows for the comprehensive analysis of how various factors impact regional inequality.~~
-
-~~- Validating the assumptions of the OLS and properly interpreting the coefficients are vital steps in ensuring the reliability of the model.~~
-
-~~- The use of cross-sectional data from the year 2010 ensures that the analysis is grounded in a specific time context, making the results more interpretable and applicable.~~
-
-#### MLR Portugal
-
-#### MLR Denmark
-
-#### MLR France
-
-#### MLR Hungary
-
-#### MLR Slovakia
-
 ### III. Model Interpretation
+
+Our first model in the Multiple Linear Regression model examine how education in addition to GDP per capita can help explain the gini coefficient. The second model look at both education, GDP per capita, and population density, while the third model examine them all and also add rail network.
+
+For model 1, the adjusted R-squared is 0.033, indicating that the model explains around 3% of the variability in the gini coefficient. Since this is relatively low, it suggests that model 1 is not suitable in explaining the variance in gini. Both variables have a p-value above 0.05, indicating that they are not statistically significant.
+
+For model 2, the adjusted R-squared is 0.300, which indicate that the model explains around 30% of the variability in the gini coefficient. This is pretty high, suggesting that model 2 is suitable in explaining the variance in gini, meaning that adding population density improves the model's explanatory power. The p-value for population density is less than 0.01, which means that its statistically significant.
+
+The adjusted R-squared for model 3 is 0.370 \~ 37%; this suggest that this model has the greatest fit of all 3 models. Population density is significant at a 0.05 level. The p-value for rail is not below 0.05, and is therefore not statistically significant.
+
+To summarize, we can see that the population density is the variable that affects the gini coeffcient the most. The more people that live in an area, the bigger the economic inequality is.
 
 # Discussion
 
