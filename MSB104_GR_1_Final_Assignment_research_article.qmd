@@ -948,13 +948,34 @@ To summarize, we can see that the population density is the variable that affect
 
 # Alternative functional forms and panel estimation
 
+By exploring our pervious estimates in the relationship between regional development on regional inequality we will estimate the log of GDP per capita in a liner regression model, defining the variables as new determinants on the effects in regional economic development using logarithim of GDP per capita. Using dummy variables to determine if the effect is significantly different in different subset of our countries.
+
 ## Part 3A Testing Development effects across subsets
 
 ## Part 3B Exploring Alternative Functional Forms
 
+### **The cuznets cuve**
+
+**Logarithmic transformation**
+
+The logarithmic transformation for all the variables allows the coefficients to be interpreted as elasticities, which measure the percentage change in the dependent variable associated with a one percent change in the independent variable [@lessmann2017]. The use of logarithmic transformations is a common practice in econometrics to address issues such as heteroscedasticity and nonlinearity in the data. By using logarithmic transformations, we are able to estimate the relationship between regional inequality and development in a more robust and accurate way [@lessmann2017].
+
+**The quadratic term**
+
+Furthermore the quadratic term in the regression model is used to investigate the relationship
+between regional inequality and development [@lessmann2017]. The results suggest an inverted U-shaped relationship between income and inequality, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017].
+
+**The cubic function**
+
+The cubic function in the regression model is used to investigate the relationship between regional inequality and development. @lessmann2017 suggest that regional inequalities increase again at very high levels of development, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017]. The inclusion of a cubic term in a regression model allows the analysis of more complex dynamics, such as increasing or decreasing marginal effects [@wooldridge2020]. However, interpreting these models can be more challenging, as the effect of a one-unit change in the predictor variable on the dependent variable is no longer constant and depends on the level of the predictor variable.
+
 ## Part 3C Hetroskedasticity Testing and causality Discussion
 
 ## Part 3D Panel Estimates
+
+**Fixed effect models**
+
+Panel data estimation is a method used in econometrics to analyse data that involves observations over multiple time periods. In the context of panel data estimation specifics of fixed-effects and random effect are used. [@lessmann2017] agrues that the fixed-effects model is a reasonable approach when the differences between countries (or regions) can be viewed as parametric shifts of the regression function. However, the random-effects model allows for time-invariant unobserved heterogeneity across regions and is more appropriate when the fixed-effects model is too restrictive [@lessmann2017].
 
 # Discussion
 
