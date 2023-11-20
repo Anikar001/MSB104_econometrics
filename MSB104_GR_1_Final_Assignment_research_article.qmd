@@ -977,15 +977,21 @@ While correlation indicates a relationship between two variables, it doesn\'t im
 
 Panel data analysis helps address endogeneity issues, such as omitted variable bias, which can lead to spurious correlation. By tracking the same units over time, it's possible to differentiate whether a relationship is genuinely causal or merely a correlation coinciding in time.
 
-**Fixed-Effects and Random-Effects Models** in panel data analysis help in controlling for unobserved heterogeneity, thereby providing a clearer picture of whether there's a causal relationship.
-
 Overall, panel data analysis is a vital tool in econometrics for distinguishing between causality and correlation. By allowing for control over unobserved heterogeneity and providing a dynamic view of data over time, it offers a more nuanced and accurate understanding of the relationships between variables. This is crucial in econometric research, where the distinction between causality and mere correlation may have significant implications.
+
+**Fixed-Effects and Random-Effects Models** in panel data analysis help in controlling for unobserved heterogeneity, thereby providing a clearer picture of whether there's a causal relationship.
 
 ## Part 3D Panel Estimates
 
 **Fixed effect models**
 
 Panel data estimation is a method used in econometrics to analyse data that involves observations over multiple time periods. In the context of panel data estimation specifics of fixed-effects and random effect are used. [@lessmann2017] agrues that the fixed-effects model is a reasonable approach when the differences between countries (or regions) can be viewed as parametric shifts of the regression function. However, the random-effects model allows for time-invariant unobserved heterogeneity across regions and is more appropriate when the fixed-effects model is too restrictive [@lessmann2017].
+
+**Random-Effects Models**
+
+@lessmann2017 mention the use of a random-effects model to investigate the determinants of
+within-country changes in inequality. The random-effects model controls for several country-level fixed factors (national income, number of regions, and area) and fixed effects for various country groups [@lessmann2017]. The advantage of the random-effects model is that the expected value of the country-specific effect is zero, which means that there is no need to apply any arbitrary data imputation procedure for the missing intercepts [@lessmann2017]. However, this approach may come at the cost of founding the predictions on a slightly biased coefficient [@lessmann2017]. The text also notes that
+the major coefficient of interest is not sensitive to applying either a fixed-effects model or a random-effects model with additional country and region information [@lessmann2017].
 
 # Discussion
 
