@@ -962,8 +962,7 @@ The logarithmic transformation for all the variables allows the coefficients to 
 
 **The quadratic term**
 
-Furthermore the quadratic term in the regression model is used to investigate the relationship
-between regional inequality and development [@lessmann2017]. The results suggest an inverted U-shaped relationship between income and inequality, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017].
+Furthermore the quadratic term in the regression model is used to investigate the relationship between regional inequality and development [@lessmann2017]. The results suggest an inverted U-shaped relationship between income and inequality, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017].
 
 **The cubic function**
 
@@ -973,7 +972,7 @@ The cubic function in the regression model is used to investigate the relationsh
 
 **Causality vs causation**
 
-While correlation indicates a relationship between two variables, it doesn\'t imply causation. In econometrics, it's a common pitfall to interpret correlation as causality. Panel data helps address this by allowing researchers to control for time-invariant factors and observe changes over time, which can provide stronger evidence for causal relationships.
+While correlation indicates a relationship between two variables, it doesn't imply causation. In econometrics, it's a common pitfall to interpret correlation as causality. Panel data helps address this by allowing researchers to control for time-invariant factors and observe changes over time, which can provide stronger evidence for causal relationships.
 
 Panel data analysis helps address endogeneity issues, such as omitted variable bias, which can lead to spurious correlation. By tracking the same units over time, it's possible to differentiate whether a relationship is genuinely causal or merely a correlation coinciding in time.
 
@@ -989,9 +988,7 @@ Panel data estimation is a method used in econometrics to analyse data that invo
 
 **Random-Effects Models**
 
-@lessmann2017 mention the use of a random-effects model to investigate the determinants of
-within-country changes in inequality. The random-effects model controls for several country-level fixed factors (national income, number of regions, and area) and fixed effects for various country groups [@lessmann2017]. The advantage of the random-effects model is that the expected value of the country-specific effect is zero, which means that there is no need to apply any arbitrary data imputation procedure for the missing intercepts [@lessmann2017]. However, this approach may come at the cost of founding the predictions on a slightly biased coefficient [@lessmann2017]. The text also notes that
-the major coefficient of interest is not sensitive to applying either a fixed-effects model or a random-effects model with additional country and region information [@lessmann2017].
+@lessmann2017 mention the use of a random-effects model to investigate the determinants of within-country changes in inequality. The random-effects model controls for several country-level fixed factors (national income, number of regions, and area) and fixed effects for various country groups [@lessmann2017]. The advantage of the random-effects model is that the expected value of the country-specific effect is zero, which means that there is no need to apply any arbitrary data imputation procedure for the missing intercepts [@lessmann2017]. However, this approach may come at the cost of founding the predictions on a slightly biased coefficient [@lessmann2017]. The text also notes that the major coefficient of interest is not sensitive to applying either a fixed-effects model or a random-effects model with additional country and region information [@lessmann2017].
 
 # Discussion
 
