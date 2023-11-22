@@ -25,6 +25,8 @@ library(vtable)
 library(lubridate)
 library(dineq)
 library(huxtable)
+library(sandwich)
+library(lmtest)
 ```
 
 # Introduction
@@ -529,6 +531,10 @@ ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
 
 ### 1. Model Estimation
 
+**Scale-Location Plot** is another way to check for homoscedasticity. The spread of the residuals should be roughly the same across all levels of the fitted values. If the spread increases or decreases with the fitted values, it suggests heteroscedasticity.
+
+**Residuals vs. Leverage Plot** to identify influential observations that might unduly influence the regression. Points with high leverage or large residuals (outliers) can be identified. Cook's distance lines may be added to help identify points that have a large influence on the model.
+
 $GINI = \beta_{0} + \beta_{1} \cdot \text{GDP per capita} + \epsilon$
 
 Gini is the dependent variable (y), while GDP per capita is the independent variable (x).
@@ -641,33 +647,13 @@ We also examined our selected countries seperately in order to see how the relia
 plot(lm, which = 1:2) 
 ```
 
-We've made two plots that can help us understand the relationship between GDP per capita and the Gini coefficient. The first one is a plot that shows us residuals vs fitted values, which can help us check the homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horisontal 0 line, something that can inducate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity.
+We've made two plots that can help us understand the relationship between GDP per capita and the Gini coefficient, and that together with the regression statistics can help with discussing if the classical OLS assumptions hold for the model. The first one is a plot that shows us residuals vs fitted values, which can help us check the homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horisontal 0 line, something that can inducate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity.
 
-The other plot - normal Q-Q plot - is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed.
+The other plot - normal Q-Q plot - is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed. There are however some outliers in the tails, that suggest some variation from normality.
+
+...
 
 In both of these plots, we can see that there are some outliers, these can affect the fit of the model. These outliers might come from regions that have a high GDP per capita compared to rest of the regions, like Paris in France that is a financial hub.
-
-The numbers we gathered earlier, as well as these plots, can help us explain and assert whether the classical OLS assumptions holds for our model:
-
--   Linearity:
-
-    -   
-
--   Independence:
-
-    -   
-
--   Normality:
-
-    -   
-
--   Homoscedasticity:
-
-    -   
-
--   Multicollinearity:
-
-    -   
 
 ```{r}
 #| echo: false
@@ -825,4 +811,271 @@ huxreg("Model" = lm1,
 
 Our first model in the Multiple Linear Regression model examine how education in addition to GDP per capita can help explain the gini coefficient. The second model look at both education, GDP per capita, and population density, while the third model examine them all and also add rail network.
 
-## Conclusion
+For model 1, the adjusted R-squared is 0.033, indicating that the model explains around 3% of the variability in the gini coefficient. Since this is relatively low, it suggests that model 1 is not suitable in explaining the variance in gini.
+
+# Assignment 3: Alternative Functional Forms and Panel Estimates
+
+## Part A: Testing Development Effects Across Subsets
+
+### Subset Analysis:
+
+To begin the third assignment, we will divide the data into different subsets. We have chosen to divide the countries based on size and population; we'll therefore have one subset with France, and one subset with the rest of the countries. We have several reasons for the dividing the countries like this:
+
+1.  France is one of the largest countries in Europe, with a great economic and political influence. The larger size and population of France may lead to different economic dyamics compared to the other smaller countries.
+
+2.  Larger countries might have a greater diversity of economic activities, wich affects the distribution of wealth and income differentely than in smaller countries with less diverse economies (source). We can see this by looking at how some of the NUTS 2 regions in France differ far more than in other countries.
+
+3.  The size and population can influence public policy, like social welfare, which impacts income distribution and inequality (source).
+
+4.  Larger countries often have larger internal markets, which can affect economic development and income distribution differently compared to smaller economies, where ecternal trade might be more crucial.
+
+| Country  | Population (in million) | Size (km\^2) | NUTS 2 observations |
+|----------|-------------------------|--------------|---------------------|
+| France   | 67,75                   | 551 695      |                     |
+| Denmark  | 5,85                    | 42 952       |                     |
+| Slovakia | 5,4                     | 49 000       |                     |
+| Hungary  | 9,71                    | 93 000       |                     |
+| Portugal | 10,33                   | 92 000       |                     |
+
+```{r}
+#| echo: false
+#| output: false
+
+# Dataframe with just france
+gini_nuts_2_FR <- gini_nuts_2 |> 
+  filter(id_nuts0 == "FR", gini_n2 > 0)
+
+# Dataframe with the other countries
+gini_nuts_2_C <- gini_nuts_2 |> 
+  filter(id_nuts0 != "FR", gini_n2 > 0)
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Descriptive analysis
+summary(gini_nuts_2_FR)
+summary(gini_nuts_2_C)
+```
+
+```{r}
+#| echo: false
+
+# Regression analysis
+# France
+lmFR <- lm(gini_n2 ~ log(GDP_per_capita), data = gini_nuts_2_FR)
+# Others
+lmC <- lm(gini_n2 ~ log(GDP_per_capita), data = gini_nuts_2_C)
+
+huxreg(France = lmFR,
+       Others = lmC,
+       statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+# Comparative analysis
+# Welch two sample t-test
+t.test <- t.test(gini_nuts_2_FR$gini_n2, gini_nuts_2_C$gini_n2)
+print(t.test)
+```
+
+### Subset Analysis Discussion:
+
+In order to discuss the differences between the two subsets, we have done different analysis: descriptive, regression and comparative.
+
+France has a mean gini coefficient of 0.06960, while the mean gini coefficient of the other countries is 0.062308. France has a slightly higher gini, meaning that they on average have a higher amount of economic inequality compared to the rest. The mean of GDP per capita is also higher in france (2.750 \> 1.743), suggesting that they also on average have a higher level of economic development (de har både høyere økonomisk ulikhet og økonomisk utvikling, hva er grunnen til dette? Kan se dette på regression analysis!! r quared har høy positiv korrelasjon).
+
+Looking at the regression analysis of France, we can see that the intercept is -0.034 with a p-value that is lower than 0.001, suggesting that the intercept is different from zero. The coefficient for log of GDP per capita is 0.110 with a p-value lower than 0.001; meaning that as the log of GDP per capita increase, the gini coefficient increase significantly, which suggest that a higher GDP per capita also gives us greater income inequality. Laslty, the R-squared is 0.490, meaning that around 49% of the variance in the gini coefficient can be explained by GDP per capita. *This is a relatively high value,* and suggest a strong model fit.
+
+## Part B: Exploring Alternative Functional Forms
+
+### Functional Form Exploration:
+
+```{r}
+
+# Logarithmic model
+log_model <- lm(gini_n2 ~ log(GDP_per_capita), data = gini_filtered)
+
+# Quadratic model
+quad_model <- lm(gini_n2 ~ GDP_per_capita + I(GDP_per_capita^2), data = gini_filtered)
+
+# Cubic model
+cubic_model <- lm(gini_n2 ~ GDP_per_capita + I(GDP_per_capita^2) + I(GDP_per_capita^3), data = gini_filtered)
+
+# Check the summary of each model
+summary(log_model)
+```
+
+```{r}
+summary(quad_model)
+```
+
+```{r}
+summary(cubic_model)
+```
+
+### 
+
+### Estimation and Visualization:
+
+```{r}
+# Quadratic model
+
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(quad_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'blue') +  # Add the regression line
+  labs(title = "Quadratic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita",
+       y = "Gini Coefficient") +
+  theme_minimal()
+```
+
+```{r}
+# Logarithmic model
+
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(log_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'red') +  # Add the regression line
+  scale_x_log10() +  # Logarithmic scale for the x-axis
+  labs(title = "Logarithmic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita (log scale)",
+       y = "Gini Coefficient") +
+  theme_minimal()
+
+```
+
+```{r}
+
+
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(cubic_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'blue') +  # Add the regression line
+  labs(title = "Cubic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita",
+       y = "Gini Coefficient") +
+  theme_minimal()
+
+```
+
+```{r}
+# Calculate residuals
+residuals_quad <- gini_filtered$gini_n2 - predict(quad_model, gini_filtered)
+residuals_cubic <- gini_filtered$gini_n2 - predict(cubic_model, gini_filtered)
+```
+
+```{r}
+# Create a dataframe for plotting residuals
+residuals_data <- data.frame(GDP_per_capita = gini_filtered$GDP_per_capita, 
+                             Residuals_Quad = residuals_quad, 
+                             Residuals_Cubic = residuals_cubic)
+
+# Plotting residuals
+ggplot(residuals_data) +
+  geom_line(aes(x = GDP_per_capita, y = Residuals_Quad, color = "Quadratic")) +
+  geom_line(aes(x = GDP_per_capita, y = Residuals_Cubic, color = "Cubic")) +
+  labs(title = "Comparison of Residuals",
+       x = "GDP per Capita",
+       y = "Residuals") +
+  theme_minimal() +
+  scale_color_manual(values = c("Quadratic" = "blue", "Cubic" = "red"))
+
+```
+
+```{r}
+sd(residuals_quad)
+sd(residuals_cubic)
+mean(residuals_quad^2)
+mean(residuals_cubic^2)
+```
+
+### Results Interpretation:
+
+## Part C: Heteroskedasticity Testing and Causality Discussion
+
+### Heteroskedasticity Testing:
+
+```{r}
+lm_01 <- lm(gini_n2 ~ GDP_per_capita, data = gini_filtered)
+```
+
+```{r}
+
+# Obtain fitted values and residuals from the model
+fitted_values <- fitted(lm_01)
+residuals <- resid(lm_01)
+
+# Create the plot
+plot(fitted_values, residuals, 
+     xlab = "Fitted Values", 
+     ylab = "Residuals", 
+     main = "Residuals vs Fitted Values for Linear Model",
+     pch = 20)
+abline(h = 0, col = "blue", lwd = 2) # Add a horizontal line at 0
+
+```
+
+```{r}
+
+# Breusch-Pagan test for the original linear model
+bptest_linear <- bptest(lm_01)
+
+# Breusch-Pagan test for the logarithmic model
+bptest_log <- bptest(log_model)
+
+# Breusch-Pagan test for the quadratic model
+bptest_quad <- bptest(quad_model)
+
+# Output the test results
+print(bptest_linear)
+print(bptest_log)
+print(bptest_quad)
+```
+
+The Breusch-Pagan test is used to detect heteroskedasticity in a regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables, which would violate one of the key assumptions of ordinary least squares (OLS) regression.
+
+```{r}
+
+# Calculate robust standard errors for the original linear model
+coeftest_lm_01 <- coeftest(lm_01, vcov = vcovHC(lm_01, type = "HC"))
+
+# Calculate robust standard errors for the logarithmic model
+coeftest_log_model <- coeftest(log_model, vcov = vcovHC(log_model, type = "HC"))
+
+# Calculate robust standard errors for the quadratic model
+coeftest_quad_model <- coeftest(quad_model, vcov = vcovHC(quad_model, type = "HC"))
+
+# Print out the results
+print(coeftest_lm_01)
+print(coeftest_log_model)
+print(coeftest_quad_model)
+
+```
+
+### Causality Discussion:
+
+## Part D: Panel Estimates
+
+### Panel Estimation Task:
+
+### Panel Estimation Analysis:
+
+### Panel Estimation Discussion:
