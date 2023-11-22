@@ -945,9 +945,17 @@ To summarize, we can see that the population density is the variable that affect
 
 # Alternative functional forms and panel estimation
 
-By exploring our pervious estimates in the relationship between regional development on regional inequality we will estimate the log of GDP per capita in a liner regression model, defining the variables as new determinants on the effects in regional economic development using logarithim of GDP per capita. Using dummy variables to determine if the effect is significantly different in different subset of our countries.
+By exploring our pervious estimates in the relationship between regional development on regional inequality we will estimate the log of GDP per capita in a liner regression model, defining the variables as new determinants on the effects in regional economic development using logarithim of GDP per capita.
+
+Firstly, we will divide the data into different subsets. Using France (x) as a binary value often called a dummy variable. France is chosen since it is the country with the most observations in 2010. Dummy variables are used to explain qualitative variables in regression models [@wooldridge2020].
+
+Choosing France as a dummy variable amongst our group of countries could be justified based on several criteria. Firstly, France stands out as one of the largest economies in this group, both in terms of GDP and global economic influence. This distinction makes France a unique case compared to the smaller economies of Denmark, Portugal, Hungary, and Slovakia. Secondly, France's larger geographical area and population size provide different economic dynamics and complexities, which are not as pronounced in the smaller and more homogenous countries like Denmark, Portugal, Hungary, and Slovakia. Thirdly, France's economy is more diversified compared to the other countries listed, which might have more specialized or less varied economic structures. This diversity can lead to different patterns in wealth distribution and economic development. Lastly, France's policies, particularly in social welfare and economic regulation, and its larger domestic market, might influence economic outcomes differently than in the smaller economies, where external trade and different policy contexts play a more significant role.
 
 ## Part 3A Testing Development effects across subsets
+
+To elucidate the differences between France and other countries, we employed various analytical methods including descriptive, regression, and comparative analyses. Descriptively, France exhibits a mean Gini coefficient of 0.06960, marginally higher than the 0.062308 average of the other countries, suggesting more pronounced economic inequality. Correspondingly, France's mean GDP per capita is also higher (2.750 compared to 1.743), indicating a higher level of economic development. This juxtaposition of heightened economic inequality and development in France raises intriguing questions, addressed further in our regression analysis.
+
+In the regression analysis of France, the intercept is -0.034 with a statistically significant p-value below 0.001, indicating a non-zero intercept. More notably, the coefficient for the logarithm of GDP per capita stands at 0.110, with a p-value below 0.001, implying a significant increase in the Gini coefficient with rising GDP per capita. This suggests that higher GDP per capita correlates with greater income inequality. The R-squared value of 0.490 indicates that about 49% of the variance in the Gini coefficient is accounted for by GDP per capita, reflecting a strong model fit. This substantial correlation necessitates further investigation into the dynamics linking economic development with inequality in France.
 
 ## Part 3B Exploring Alternative Functional Forms
 
@@ -965,6 +973,126 @@ Furthermore the quadratic term in the regression model is used to investigate th
 
 The cubic function in the regression model is used to investigate the relationship between regional inequality and development. @lessmann2017 suggest that regional inequalities increase again at very high levels of development, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017]. The inclusion of a cubic term in a regression model allows the analysis of more complex dynamics, such as increasing or decreasing marginal effects [@wooldridge2020]. However, interpreting these models can be more challenging, as the effect of a one-unit change in the predictor variable on the dependent variable is no longer constant and depends on the level of the predictor variable.
 
+### Functional Form Exploration
+
+```{r}
+#| echo: false
+#| output: false
+# Logarithmic model
+log_model <- lm(gini_n2 ~ log(GDP_per_capita), data = gini_filtered)
+
+# Quadratic model
+quad_model <- lm(gini_n2 ~ GDP_per_capita + I(GDP_per_capita^2), data = gini_filtered)
+
+# Cubic model
+cubic_model <- lm(gini_n2 ~ GDP_per_capita + I(GDP_per_capita^2) + I(GDP_per_capita^3), data = gini_filtered)
+
+# Check the summary of each model
+summary(log_model)
+```
+
+```{r}
+summary(cubic_model)
+```
+
+```{r}
+summary(quad_model)
+```
+
+### Estimation and Visualization
+
+```{r}
+#| echo: false
+#| output: false
+# Quadratic model
+
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(quad_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'blue') +  # Add the regression line
+  labs(title = "Quadratic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita",
+       y = "Gini Coefficient") +
+  theme_minimal()
+```
+
+```{r}
+# Logarithmic model
+
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(log_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'red') +  # Add the regression line
+  scale_x_log10() +  # Logarithmic scale for the x-axis
+  labs(title = "Logarithmic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita (log scale)",
+       y = "Gini Coefficient") +
+  theme_minimal()
+```
+
+```{r}
+#| echo: false
+#| output: false
+# Create a new data frame for plotting predicted values
+plot_data <- data.frame(GDP_per_capita = seq(min(gini_filtered$GDP_per_capita), max(gini_filtered$GDP_per_capita), length.out = 250))
+plot_data$gini_pred <- predict(cubic_model, newdata = plot_data)
+
+# Plotting
+ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
+  geom_point(alpha = 0.5) +  # Plot the actual data points
+  geom_line(data = plot_data, aes(x = GDP_per_capita, y = gini_pred), color = 'blue') +  # Add the regression line
+  labs(title = "Cubic Model of GDP per Capita and Gini Coefficient",
+       x = "GDP per Capita",
+       y = "Gini Coefficient") +
+  theme_minimal()
+```
+
+```{r}
+#| echo: false
+#| output: false
+# Calculate residuals
+residuals_quad <- gini_filtered$gini_n2 - predict(quad_model, gini_filtered)
+residuals_cubic <- gini_filtered$gini_n2 - predict(cubic_model, gini_filtered)
+```
+
+```{r}
+#| echo: false
+#| output: false
+# Create a dataframe for plotting residuals
+residuals_data <- data.frame(GDP_per_capita = gini_filtered$GDP_per_capita, 
+                             Residuals_Quad = residuals_quad, 
+                             Residuals_Cubic = residuals_cubic)
+
+# Plotting residuals
+ggplot(residuals_data) +
+  geom_line(aes(x = GDP_per_capita, y = Residuals_Quad, color = "Quadratic")) +
+  geom_line(aes(x = GDP_per_capita, y = Residuals_Cubic, color = "Cubic")) +
+  labs(title = "Comparison of Residuals",
+       x = "GDP per Capita",
+       y = "Residuals") +
+  theme_minimal() +
+  scale_color_manual(values = c("Quadratic" = "blue", "Cubic" = "red"))
+```
+
+```{r}
+#| echo: false
+#| output: false
+sd(residuals_quad)
+sd(residuals_cubic)
+mean(residuals_quad^2)
+mean(residuals_cubic^2)
+```
+
+**Results Interpretation**
+
 ## Part 3C Hetroskedasticity Testing and causality Discussion
 
 **Causality vs causation**
@@ -975,11 +1103,72 @@ Panel data analysis helps address endogeneity issues, such as omitted variable b
 
 Overall, panel data analysis is a vital tool in econometrics for distinguishing between causality and correlation. By allowing for control over unobserved heterogeneity and providing a dynamic view of data over time, it offers a more nuanced and accurate understanding of the relationships between variables. This is crucial in econometric research, where the distinction between causality and mere correlation may have significant implications.
 
-**Fixed-Effects and Random-Effects Models** in panel data analysis help in controlling for unobserved heterogeneity, thereby providing a clearer picture of whether there's a causal relationship.
+**Heteroskedasticity Testing**
+
+```{r}
+#| echo: false
+#| output: false
+#hetro
+lm_01 <- lm(gini_n2 ~ GDP_per_capita, data = gini_filtered)
+```
+
+```{r}
+#| echo: false
+#| output: false
+# Obtain fitted values and residuals from the model
+fitted_values <- fitted(lm_01)
+residuals <- resid(lm_01)
+
+# Create the plot
+plot(fitted_values, residuals, 
+     xlab = "Fitted Values", 
+     ylab = "Residuals", 
+     main = "Residuals vs Fitted Values for Linear Model",
+     pch = 20)
+abline(h = 0, col = "blue", lwd = 2) # Add a horizontal line at 0
+```
+
+The Breusch-Pagan test is used to detect heteroskedasticity in a regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables, which would violate one of the key assumptions of ordinary least squares (OLS) regression.
+
+```{r}
+#| echo: false
+#| output: false
+# Breusch-Pagan test for the original linear model
+bptest_linear <- bptest(lm_01)
+
+# Breusch-Pagan test for the logarithmic model
+bptest_log <- bptest(log_model)
+
+# Breusch-Pagan test for the quadratic model
+bptest_quad <- bptest(quad_model)
+
+# Output the test results
+print(bptest_linear)
+print(bptest_log)
+print(bptest_quad)
+```
+
+```{r}
+#| echo: false
+#| output: false
+# Calculate robust standard errors for the original linear model
+coeftest_lm_01 <- coeftest(lm_01, vcov = vcovHC(lm_01, type = "HC"))
+
+# Calculate robust standard errors for the logarithmic model
+coeftest_log_model <- coeftest(log_model, vcov = vcovHC(log_model, type = "HC"))
+
+# Calculate robust standard errors for the quadratic model
+coeftest_quad_model <- coeftest(quad_model, vcov = vcovHC(quad_model, type = "HC"))
+
+# Print out the results
+print(coeftest_lm_01)
+print(coeftest_log_model)
+print(coeftest_quad_model)
+```
 
 ## Part 3D Panel Estimates
 
-Since panel data has a two-dimensional structure, with observations on multiple entities across several time periods. It enables us a more detailed and complex analyses compared to purely cross-sectional or time-series data. The data will then allow us to examine both cross-sectional (differences between subjects at a point in time) and longitudinal (changes within subjects over time) effects. For instance, this approach would be apt for studying how policy changes within a region affect its GDP and inequality levels.
+Since panel data has a two-dimensional structure, with observations on multiple entities across several time periods. It enables us a more detailed and complex analyses compared to purely cross-sectional or time-series data. The data will then allow us to examine both cross-sectional (differences between subjects at a point in time) and longitudinal (changes within subjects over time) effects. For instance, this approach would be apt for studying how policy changes within a region affect its GDP and inequality levels. Fixed-Effects and Random-Effects Models in panel data analysis help in controlling for unobserved heterogeneity, thereby providing a clearer picture of whether there's a causal relationship.
 
 **Fixed effect models**
 
