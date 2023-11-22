@@ -1130,6 +1130,10 @@ plot(fitted_values, residuals,
 abline(h = 0, col = "blue", lwd = 2) # Add a horizontal line at 0
 ```
 
+The residuals vs. fitted values plot indicates potential issues with our linear model, which might include heteroskedasticity and model misspecification. The observed patterns and their possible implications, suggests that our model might be missing a nonlinear relationship between the dependent and independent variables. This is a sign of model misspecification, indicating that the current linear model may not be the best fit for our data. The variance in the residuals first increasing, then decreasing, and increasing again, implies that the error terms have non-constant variance, which is a sign of heteroskedasticity. In a well-specified homoscedastic model, the spread of the residuals should be roughly equal across all levels of fitted values.
+
+The sets of disconnected residuals further out could indicate that there are distinct subgroups within our data that are behaving differently. It might suggest that the relationship between the variables differs across these groups or that there are influential outliers or leverage points affecting the model differently in these areas.
+
 The Breusch-Pagan test is used to detect heteroskedasticity in a regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables, which would violate one of the key assumptions of ordinary least squares (OLS) regression.
 
 ```{r}
