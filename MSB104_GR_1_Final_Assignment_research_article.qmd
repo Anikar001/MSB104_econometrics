@@ -945,9 +945,9 @@ To summarize, we can see that the population density is the variable that affect
 
 # Alternative functional forms and panel estimation
 
-By exploring our pervious estimates in the relationship between regional development on regional inequality we will estimate the log of GDP per capita in a liner regression model, defining the variables as new determinants on the effects in regional economic development using logarithim of GDP per capita.
+By exploring our previous estimates in the relationship between regional development on regional inequality we will estimate the log of GDP per capita in a liner regression model, defining the variables as new determinants on the effects in regional economic development using logarithim of GDP per capita.
 
-Firstly, we will divide the data into different subsets. Using France (x) as a binary value often called a dummy variable. France is chosen since it is the country with the most observations in 2010. Dummy variables are used to explain qualitative variables in regression models [@wooldridge2020].
+Firstly, the data is devided into different subsets. Using France (x) as a binary value also called a dummy variable [@wooldridge2020].
 
 Choosing France as a dummy variable amongst our group of countries could be justified based on several criteria. Firstly, France stands out as one of the largest economies in this group, both in terms of GDP and global economic influence. This distinction makes France a unique case compared to the smaller economies of Denmark, Portugal, Hungary, and Slovakia. Secondly, France's larger geographical area and population size provide different economic dynamics and complexities, which are not as pronounced in the smaller and more homogenous countries like Denmark, Portugal, Hungary, and Slovakia. Thirdly, France's economy is more diversified compared to the other countries listed, which might have more specialized or less varied economic structures. This diversity can lead to different patterns in wealth distribution and economic development. Lastly, France's policies, particularly in social welfare and economic regulation, and its larger domestic market, might influence economic outcomes differently than in the smaller economies, where external trade and different policy contexts play a more significant role.
 
@@ -1021,6 +1021,8 @@ ggplot(gini_filtered, aes(x = GDP_per_capita, y = gini_n2)) +
 ```
 
 ```{r}
+#| echo: false
+#| output: false
 # Logarithmic model
 
 # Create a new data frame for plotting predicted values
