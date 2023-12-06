@@ -33,19 +33,17 @@ library(lmtest)
 
 # Introduction
 
-While national GDP and GDP per capita are vital indicators of a country's aggregate economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, paradoxically, coexist with pockets of regional deprivation [@lessmann2017].
+While national GDP and GDP per capita are vital indicators of a country's collective economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, unexpectedly, coexist with pockets of regional deprivation [@lessmann2017]. The truth of this statement becomes more evident when taking a closer look at sub-national data. Regional wealth disparities are of prime concern, especially when crafting policies for equitable growth [@lessmann2017]. Furthermore, a country's macro-level prosperity does not automatically guarantee, that all its regions partake equally in this wealth. By studying smaller regions within a country, it is possible to get a healthier narrative about the state of regional economic disparities [@lessmann2017].
 
-The truth of this statement becomes more evident when taking a closer look at sub-national data. Regional wealth disparities are of prime concern, especially when crafting policies for equitable growth [@lessmann2017]. A country's macro-level prosperity does not automatically guarantee that all its regions partake equally in this wealth. By studying smaller regions within a country, it is possible to get a more nuanced narrative about the state of regional economic disparities [@lessmann2017].
+The aims are to acquire, process, and analyse sub-national GDP, GINI and population data for a subset of European countries. Using regression models with time series data, cross-sectional and panel data observations we investigate economic growth and inequality trends in; Portugal, France, Hungary, Slovakia and Denmark in the time period 2000 to 2020.
 
-Using time series data and cross-sectional observations we investigate Economic growth and Inequality trends in Portugal, France, Hungary, Slovenia and Denmark in the time period 2000 to 2020. The aims are to acquire, process, and analyse sub-national GDP, GINI and population data for a subset of European countries.
+Moreover, the primary objective is to gain knowledge of econometric methods used for science in business through our given topic. Subsequently, econometric terms and definitions are explained in greater detail than it normally would in similar papers.
 
-The primary objective is to gain knowledge of econometric methods used for science in business through our given topic. Subsequently, econometric terms and definitions are explained in greater detail than it normally would in similar papers. Using GDP per capita and the Gini coefficient. Moreover, both are vital indicators in the field of economics and are frequently used, in a wide array of studies. Furthermore, to analyse and interpret the economic conditions and social disparities of different regions or countries. Their analysis provides crucial insights for policymakers, economists, and researchers in shaping and evaluating the effectiveness of socio-economic policies.
+The research question ***"What are the regional economic growth and inequality measurements from 2000 to 2020, in selected European countries and how does other*** ***determinants affect the results?"*** is key in guiding our study. Setting a solid foundation for a comprehensive study that not only measure our given parameters, but also a critically examination of the role of determinants such as transportation infrastructure and education. @lessmann2017 states that transportation costs play an important role in agglomeration and income, and reduced transportation costs.
 
-The research question ***"What are the regional economic growth and inequality measurements from 2000 to 2020, in selected European countries and how does other*** ***determinants affect the results?"*** is key in guiding our study. Setting a solid foundation for a comprehensive study that not only measure our given parameters, but also a critically examination of the role of determinants such as transportation infrastructure and education. @lessmann2017 states that transportation costs play an important role in agglomeration and income, and reduced transportation costs as a determinant of regional inequality.
+The structure of our study is methodically designed to facilitate this exploration. In part 1A and B we calculate GDP per capita and explore regional inequality using various descriptive statistics and visualizations such as panel data. In part 2A and B we use cross sectional method to examine the relationship between regional development and inequality, employing cross sectional estimation techniques for the year 2010. Furthermore, exploring alternative functional forms and implementing panel estimation to analyse the relationship between regional development inequality.
 
-The sructure of our study is methodically designed to facilitate this exploration. In part 1A and B we calculate GDP per capita and explore regional inequality using various descriptive statistics and visualizations such as panel data. In part 2A and B we use cross sectional method to examine the relationship between regional development and inequality, employing cross sectional estimation techniques for the year 2010. Furthermore, exploring alternative functional forms and implementing panel estimation to analzise the relationship between regional development inequality.
-
-Lastly, it is worth noting potential limitations may arise due to the use of ChatGPT and ChatGPT PDF, which have been utilized as tools to gain understanding and extract knowledge from academic papers, as well as to explain econometric terms and definitions. The text generated by these tools has been cross-checked to the best of our knowledge with our textbook and Andre Seidel, lecturer and author of 'Regional Inequality, Convergence, and Its Determinants -- A View from Outer Space' (2017). Despite these precautions, there may be instances where incorrect information was provided, and some errors could have been overlooked. The text has been meticulously rewritten to fit our style of writing, ensuring consistency and accuracy throughout our study.
+Lastly, it is worth noting potential limitations may arise due to the use of ChatGPT and ChatGPT PDF, which have been utilized as tools to gain understanding and extract knowledge from academic papers, as well as to explain econometric terms and definitions. The text generated by these tools has been cross-checked to the best of our knowledge with our textbook and Andre Seidel, lecturer, and author of 'Regional Inequality, Convergence, and Its Determinants -- A View from Outer Space' (2017). Despite these precautions, there may be instances where incorrect information was provided, and some errors could have been overlooked.
 
 # Literature Review: Regional Economic Growth, Inequality and determines (2000-2020)
 
@@ -209,6 +207,7 @@ Portugal_data <- GDP_per_capita |>
 ```{r}
 #| echo: false
 
+
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Portugal. 
 
 Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, color = id_nuts3)) +
@@ -216,14 +215,16 @@ Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, co
   labs(title="Figure 1: GDP per Capita for Portugal", 
        x="Year",
        y="GDP per Capita") +
-  theme(legend.position="none")
+    theme(legend.position="none")
 
 # Print out the figure
 
 print(Portugal_data_plot)
 ```
 
-HER kommer BESKRIVE TRENDER
+The graph depicts a 20-year upward trend in GDP per capita across Portugal's regions, illustrating resilience and economic recovery despite various setbacks. Three regions have noticeable higher GDP per capita than the rest among those Alentejo Central (top, green) and Algarve (top, purple) as well as areas around the capital Lisbon (top, blue). The first two regions experienced significant growth, bolstered by factors like human capital development and a thriving tourism industry. This growth, however, was followed by a notable dip around 2008, reflecting these regions' sensitivity to global economic shifts and their reliance on tourism. The Metropolitan Area of Lisbon (Top Blue), while also impacted, showed less fluctuation during this period, indicative of its more diverse economic base.
+
+Post-financial crisis, there was a clear trend of recovery and return to growth across the regions, demonstrating their ability to adapt and rebound from economic challenges. However, the onset of the COVID-19 pandemic introduced a universal decline in all regions, underscoring the extensive impact of global health crises on regional economies. This pandemic-induced downturn mirrors global economic trends, where financial instability, as noted by Nguyen et al. (2022), often exacerbates regional economic hardships.
 
 ```{r}
 #| echo: false
