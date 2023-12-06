@@ -95,11 +95,13 @@ Overall, it is evident that regional economic growth and inequality in Europe fr
 
 ## **Data collection**
 
-All dataset used in this paper is from Eurostat and based on the Nomenclature of Territorial Units for Statistics (NUTS) classification. The NUTS system provides a hierarchical classification of the EU's economic territory, facilitating the collection and harmonization of European statistics, and ranges from the national level (NUTS 0) to smaller regional divisions (NUTS 3).
+All dataset used in this paper is from Eurostat and based on the Nomenclature of Territorial Units for Statistics (NUTS) classification. The NUTS system provides a hierarchical classification of the EU\'s economic territory, facilitating the collection and harmonization of European statistics, and ranges from the national level (NUTS 0) to smaller regional divisions (NUTS 3).
 
 The collected data for GDP per capita includes values in current prices and those adjusted for purchasing power parity (PPP), enabling comparisons by accounting for price level differences. GDP at market prices measures the total economic output within regions, adjusted by taxes, subsidies, and not delineated by specific sectors.
 
-Furthermore, population data includes annual figures on births, deaths, net migration, along with demographic details. Eurostat update these dataset annually. Furthermore, transportation infrastructure data encompasses the extent of the inland transport network, including motorways, railways, and waterways, within the EU, EFTA, and candidate countries. It is reported annually by various national authorities and used to explore the link between infrastructure and regional development. Educational attainment data reflects the highest level of education completed by individuals within regions, with additional metrics on employment and education status, particularly among young people. This data is derived from annual averages of the EU Labor Force Survey.
+Furthermore, population data includes annual figures on births, deaths, net migration, along with demographic details. Eurostat update these datasets annually. Transportation infrastructure data encompasses the extent of the inland transport network, including motorways, railways, and waterways, within the EU, EFTA, and candidate countries. The data is reported annually by various national authorities and used to explore the link between infrastructure and regional development. Educational attainment data reflects the highest level of education completed by individuals within regions, with additional metrics employment and education status, particularly among young people. This data is derived from annual averages of the EU Labor Force Survey.
+
+In the next section, we explore the data using descriptive statistics, crucial for understanding regional income inequality, a concept that presents challenges due to the heterogeneity of regions.
 
 ```{r}
 #| echo: false
@@ -127,13 +129,13 @@ pop_data_01 <- pop_data |>
   select(geo, year = TIME_PERIOD, population = OBS_VALUE)
 ```
 
+## Descriptive statistics
+
 In this section, we explore a variety of descriptive statistics, crucial for understanding regional income inequality, a concept that presents challenges due to the heterogeneity of regions. Our dataset encompasses a diverse range of regions, each varying significantly in size and population.
 
-This paper focuses on two distinct types of measures: static and dynamic. Static measures offer a cross-sectional snapshot, providing a perspective on these inequalities at a specific point in time. In contrast, dynamic measures track historical trends, offering insights into how these disparities evolve over time, a concept well-articulated in [@wooldridge2020].
+This paper focuses on two distinct types of statistic measures: static and dynamic. Static measures offer a cross-sectional snapshot, providing a perspective on these inequalities at a specific point in time. In contrast, dynamic measures track historical trends, offering insights into how these disparities evolve over time, a concept well-articulated in by @wooldridge2020.
 
 Moreover, to effectively convey our findings, we utilize graphical representations, particularly focusing on GDP per capita across various regions. These visualizations not only aid in understanding the current state of regional disparities but also in tracing their progression over time.
-
-## Descriptive statistics
 
 **Mean**
 
@@ -141,11 +143,11 @@ We calculate the mean to provide a representative value for the dataset, facilit
 
 **MMR**
 
-Comparing the GRP per capita of the region with the highest income to the region with the lowest income (minimum GDP per capita) provides a measure of the range of these disparities. If this measure is small (close to 1), then it would mean that the different regions have relatively equal incomes [@wooldridge2020]. If this measure is large, then the interpretation is more problematic, as it does not tell if the high ratio is due to substantial variation in the distribution of per capita GDRPs or the presence of outliers. Nevertheless, maximum to minimum ratio (MMR) provides a quick, easy to comprehend, and politically powerful measure of regional income inequality.
+Comparing the GDP per capita of the region with the highest income to the region with the lowest income (minimum GDP per capita) provides a measure of the range of disparities. If this measure is small (close to 1), the different regions have relatively equal incomes [@wooldridge2020]. If this measure is large, then the interpretation is more problematic, as it does not tell if the high ratio is due to substantial variation in the distribution or the presence of outliers. Nevertheless, maximum to minimum ratio (MMR) provides a quick, comprehensible, and powerful measure of regional income inequality.
 
 **Standard diviation (SD)**
 
-Calculating SD to quantify the dispersion or variability of a data set around its mean. Helping us assess the degree of uncertainty, variability, or risk associated with an economic variable or parameter, which is crucial for understanding the reliability of estimations and predictions [@wooldridge2020].
+Calculating the standard deviation (SD) quantifies the dispersion or variability of a dataset around its mean, thereby aiding in assessing the degree of uncertainty, variability, or risk associated with an economic variable or parameter. This is crucial for evaluating the reliability of estimations and predictions in economic analysis, as highlighted by @wooldridge2020.
 
 **Median**
 
@@ -155,7 +157,7 @@ The median serves as a robust measure of central tendency, especially when a dat
 
 ### GDP per Capita Calculation
 
-The formula for calculating GDP per Capita is as follows:
+The formula for calculating GDP per Capita below:
 
 $y_i=GDP_i/population_i$
 
@@ -200,7 +202,7 @@ GDP_per_capita <- merged_data |>
 # we use *100 in order to get the gdp per capita as a percentage, and digits = 2 to limit it down to two decimals
 ```
 
-When exploring our data we will look at different NUTS levels aswell as countries both together and seperated.
+In the following sections we will investigate our data at various NUTS levels and consider countries both collectively and individually. This approach allows us to discern broader regional trends, while also capturing unique national characteristics. Such a multifaceted examination is essential for a nuanced understanding of the economic dynamics within our chosen countries.
 
 ### GDP per capita Portugal
 
@@ -233,7 +235,7 @@ Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, co
 print(Portugal_data_plot)
 ```
 
-HER NÅ VI BESKRIVE TRENDER
+HER kommer BESKRIVE TRENDER
 
 ```{r}
 #| echo: false
@@ -303,7 +305,7 @@ summary_stats_france <- sapply(France_data["GDP_per_capita"], function(x) c(
 print(summary_stats_france)
 ```
 
-GDP per capita statistics from France show that the mean is 2.63, indicating an overall high economic status across regions. The median, at 2.44, is lower than the mean, suggesting a distribution skewed towards wealthier areas. The standard deviation is 1.05, highlighting considerable regional economic variability. The range is notably wide, with the minimum GDP per capita at 0.83 and the maximum at 11.58, underscoring stark contrasts. Regions like Île-de-France, encompassing Paris, and affluent areas like the southern Riviera, likely contribute to the high maximum value, illustrating a significant economic divide between urban centres and rural areas.
+GDP per capita statistics from France show that the mean is 2.63, indicating an overall high economic status across regions. The median, at 2.44, is lower than the mean, suggesting a distribution skewed towards wealthier areas. The standard deviation is 1.05, highlighting considerable regional economic variability. The range is notably wide, with the minimum GDP per capita at 0.83 and the maximum at 11.58, underscoring stark contrasts. As observed in our time series, regions like Île-de-France, encompassing Paris, and affluent areas like the southern Riviera, likely contribute to the high maximum value, illustrating a significant economic divide between urban centres and rural areas.
 
 ### GDP per capita Hungary
 
@@ -431,6 +433,8 @@ Denmark_data_plot <- ggplot(Denmark_data, aes(x = year, y = GDP_per_capita, colo
 print(Denmark_data_plot)
 ```
 
+Beskrivelse kommer! :D
+
 ```{r}
 #| echo: false
 #| print: false
@@ -448,19 +452,19 @@ summary_stats_denmark <- sapply(Denmark_data["GDP_per_capita"], function(x) c(
 print(summary_stats_denmark)
 ```
 
-Lastly, In Denmark, with its higher mean of 4.4192 compared to the median of 4.0000 suggests regions like Copenhagen, with its significant economic activity, are likely elevating the national average. The standard deviation of 1.3439 indicates moderate regional economic disparities, while the range from 2.76 to 8.42 reflects Copenhagen's economic prominence relative to other regions.
+Lastly, in Denmark we observe a higher mean of 4.4192 compared to the median of 4.0000 suggesting regions like Copenhagen, with its significant economic activity, are likely elevating the national average. The standard deviation of 1.3439 indicates moderate regional economic disparities, while the range from 2.76 to 8.42 reflects Copenhagen's economic prominence relative to other regions.
 
 ## Part 1B: Regional Inequity
 
+In this part we compute the population-weighted GDP Gini coefficient for each European NUTS2 region in our assigned countries. The GINI coefficient measures inequality in our distribution, a useful tool when looking at regional inequality. The closer the GINI coefficient is to 1, the bigger the inequality; a number closer to 0 equals equality. Furthermore, looking at the GINI coefficient for NUTS 2 regions, will provide a better overview over differences in income between different regions, making it easier to address difference between the regions @hasell2023.
+
 ### Gini Coefficient Calculation
 
-In this part we will compute the population-weighted GDP Gini coefficient for each European NUTS2 region in our assigned countries.
-
-The gini coefficient can help us measure inequality in a distribution, as is therefore a useful tool for us to use when we look at regional inequity. The closer the gini coefficient is to 1, the bigger the inequality is; a number closer to 0 equals equality. When looking at the gini coefficient for NUTS 2 regions, we also get a better overview over differences in income between different regions, and it also makes it easier to find the reasons as to why there is a difference between the regions @hasell2023.
-
-With the use of the NUTS3 GDP per capita data and this formula:
+Calculation the NUTS3 GDP per capita data with the following formula:
 
 $GINW_j=\frac{1}{2 \bar{y_j}} \sum_{i}^{n_j}\sum_{l}^{n_j}\frac{p_i}{P_j} \frac{p_l}{P_j} |y_i-y_l|$
+
+The GINI serves as the dependent variable Y, reflecting the extent of income inequality within a specific region. Furthermore, the weights Pi / pi and Pj / pj adjust the calculation based on the proportion of individual's income, to the total population. The equation considers the population size of each area to give more accurate importance to areas with larger populations. This way, income disparities in more populated areas have a proportionally greater impact on the Gini coefficient than those in less populated areas, reflecting a more realistic picture of regional inequality.
 
 ```{r}
 #| echo: false
@@ -504,7 +508,7 @@ gini_filtered <- gini_nuts_2 |>
   filter(gini_n2 != 0)
 ```
 
-After calculating the gini coefficients, we can see that there are some similarities to the data we got from GDP per capita for NUTS 3 regions. In order to see these similarities better, as well as look for other important aspects that can be provided trough the calculations, we will visualize the data in three different ways.
+After calculating the GINI, we observe similarities to the GDP per capita data for NUTS 3 regions. By adopting different approaches to visualization such as the one provided in the bar chart below, we get a better understanding of these similarities. Moreover, looking for other important aspects.
 
 ```{r}
 #| echo: false
@@ -517,6 +521,8 @@ ggplot(gini_filtered, aes(x = id_nuts2, y = gini_n2, fill = id_nuts0)) +
   ylab("Gini Coefficient") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+The chart underscores the varied landscape of income inequality within European NUTS 2 regions. France's Île-de-France (FR10), Champagne-Ardenne (FRF2), Midi-Pyrénées (FRJ2), and Auvergne (FRK2) show significant disparities, likely linked to urban wealth concentration and policy. Denmark differs, with Copenhagen (DK01) and Central Jutland (DK03) displaying lower inequality, and Zealand (DK02) and North Jutland (DK04) even lower, reflecting strong equal opportunities practices. Lorraine (FRF3) in France suggests similar equity. Hungary's inequality is uniformly high except for Southern Transdanubia (HU23). Portugal's Lisbon (PT11) stands out for high inequality, while Slovakia's regions show lower disparity, akin to Denmark's average but not its lowest. Denmark emerges as having the least inequality, with France showing the greatest and Hungary and Slovakia presenting more uniform distributions.
 
 ```{r}
 #| echo: false
