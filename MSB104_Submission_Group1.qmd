@@ -93,41 +93,13 @@ Overall, it is evident that regional economic growth and inequality in Europe fr
 
 # Data and Descriptive
 
-Trough Eurostat, we download the datasets nama_10r_3gdp , demo_r_pjanggr3, demo_r_mlifexp, tran_r_net and edat_lfse_04 as csv files. Selecting our countries of study and timeperiod. Selecting the required NUTS level and specified the data to be in million Euro.
+## **Data collection**
 
-## GDP
+All dataset used in this paper is from Eurostat and based on the Nomenclature of Territorial Units for Statistics (NUTS) classification. The NUTS system provides a hierarchical classification of the EU's economic territory, facilitating the collection and harmonization of European statistics, and ranges from the national level (NUTS 0) to smaller regional divisions (NUTS 3).
 
-The GDP dataset provides insights into GDP at regional level using the NUTS classification system. It furnishes GDP values in both current prices and adjusted for inflation, with figures given in purchasing power standards (PPS) to account for price level differences between countries. The data is mostly structured by year and region @database.
+The collected data for GDP per capita includes values in current prices and those adjusted for purchasing power parity (PPP), enabling comparisons by accounting for price level differences. GDP at market prices measures the total economic output within regions, adjusted by taxes, subsidies, and not delineated by specific sectors.
 
-The GDP at market prices represents the final result of production activities of resident producer units within a region or nation. It is calculated as the sum of the gross value added across various institutional sectors or industries. Furthermore, augmented by taxes and reduced by subsidies on products (which are not allocated to specific sectors or industries) @database. This also balances out in the total economy production account. In terms of methodology, while national accounts compile GDP from the expenditure side, regional accounts don't adopt this approach due to the complexities of accurately mapping inter-regional flows of goods and services.
-
-The different measures for the regional GDP are absolute figures in € and Purchasing Power Standards (PPS), figures per inhabitant and relative data compared to the EU Member States average @database.
-
-## Population
-
-Eurostat's records annual population data with NUTS classification. Our dataset includes information on births, deaths, net migration, and may also include demographic information on age and gender. Displayed in a year-by-region format, with yearly interval updates @database.
-
-Eurostat's primary source for yearly demographic data at the regional level stems from the Unified Demography (Unidemo) project. The project covers 37 countries and is the central repository for demographic and migration-related data @database. As well as, specific metrics gathered under UNIDEMO encompass population counts at the close of the calendar year and events such as births and deaths occurring within that year @database. Additionally, data on marriages, divorces, and migration flows are recorded .
-
-For the purpose of this research, the demographic data references the NUTS 2016 classification, which provides a detailed breakdown of the European Union's territory @database.
-
-## Demographic (Nuts 2)
-
-Statistics on population change (demo_r_mlifexp) and on population structure was collected from Euro Stat [@database]. Used to monitor demographic behavior within political, economic, social and cultural contexts at NUTS 2 level. Same policy and demographic classifications as previous population data set applies.
-
-## Transportation Infrastructure (Nuts 2)
-
-This data-set (tran_r_net) presents recent data on the inland transport network of the European Union (EU), EFTA and candidate countries presenting motorways, railways and inland waterways [@database]. Furthermore used as a varable of of interest (MLR) in our section growth and inequality. Moreover, to excamine if evolution of the transport network is closely linked to the general development of the economy.
-
-The collected data are compiled by the competent national authorities. Reported annually be the National Statistical Office, the Civil Aviation Authorities (air transport), the Ministry of Transport (inland waterways, railway and road networks, victims), and the National Maritime Administration (maritime transport) [@database].
-
-## Education (Nuts 2)
-
-This data set (edat_lfse_04) contains population by educational attainment level, sex and NUTS 2 regions (%). Including data on the highest level of education successfully completed by the individuals of a given population. Furthermore, data on young people neither in employment nor in education and training -- NEET, early leavers from education and training and the labor status of young people by years since completion of highest level of education. Calculated as annual averages of quarterly EU Labor Force Survey data (EU-LFS).
-
-## NUTS classification
-
-The Nomenclature of Territorial Units for Statistics (NUTS) offers a stratified system to segment the economic territory of the EU and UK to facilitate the consistent collection and harmonization of regional statistics across Europe. The NUTS regions range from NUTS 0 Country level to NUTS 3 small units such as municipalities level @eurostat2023a.  
+Furthermore, population data includes annual figures on births, deaths, net migration, along with demographic details. Eurostat update these dataset annually. Furthermore, transportation infrastructure data encompasses the extent of the inland transport network, including motorways, railways, and waterways, within the EU, EFTA, and candidate countries. It is reported annually by various national authorities and used to explore the link between infrastructure and regional development. Educational attainment data reflects the highest level of education completed by individuals within regions, with additional metrics on employment and education status, particularly among young people. This data is derived from annual averages of the EU Labor Force Survey.
 
 ```{r}
 #| echo: false
@@ -155,11 +127,11 @@ pop_data_01 <- pop_data |>
   select(geo, year = TIME_PERIOD, population = OBS_VALUE)
 ```
 
-In this part we will report and interpret different types of essential descriptive statistics. Measuring regional income inequality is challenging due to heterogeneity of regions [@lessmann2017]. The number of regions in our data set varies largely in size and population. Since the focus of this paper is purely growth and changes in inequities over time, the variations of size and population density becomes a minor issue because the country-level territorial heterogeneity is fixed [@lessmann2017].
+In this section, we explore a variety of descriptive statistics, crucial for understanding regional income inequality, a concept that presents challenges due to the heterogeneity of regions. Our dataset encompasses a diverse range of regions, each varying significantly in size and population.
 
-"Interest in income inequality has led to the development of several ways of measuring it. Two types of measures are of interest in this paper----static and dynamic. *Static measures* provide a snapshot (cross sectional) of these inequalities at a point of time whereas the dynamic *measures capture historical trends* (Paneldata)*.*" [@wooldridge2020]
+This paper focuses on two distinct types of measures: static and dynamic. Static measures offer a cross-sectional snapshot, providing a perspective on these inequalities at a specific point in time. In contrast, dynamic measures track historical trends, offering insights into how these disparities evolve over time, a concept well-articulated in [@wooldridge2020].
 
-By using figures, we can visualize the GDP per capita, and look at how it varies among the different regions. In these figures, a line represent one NUTS 3 region.
+Moreover, to effectively convey our findings, we utilize graphical representations, particularly focusing on GDP per capita across various regions. These visualizations not only aid in understanding the current state of regional disparities but also in tracing their progression over time.
 
 ## Descriptive statistics
 
@@ -169,7 +141,7 @@ We calculate the mean to provide a representative value for the dataset, facilit
 
 **MMR**
 
-Comparing the GRDP (gross regional domestic product) per capita of the region with the highest income to the region with the lowest income (minimum per capita GRDP) provides a measure of the range of these disparities. If this measure is small (close to 1), then it would mean that the different regions have relatively equal incomes [@wooldridge2020]. If this measure is large, then the interpretation is more problematic, as it does not tell us if the high ratio is due to substantial variation in the distribution of per capita GDRPs or the presence of outliers. Nevertheless, maximum to minimum ratio (MMR) provides a quick, easy to comprehend, and politically powerful measure of regional income inequality.
+Comparing the GRP per capita of the region with the highest income to the region with the lowest income (minimum GDP per capita) provides a measure of the range of these disparities. If this measure is small (close to 1), then it would mean that the different regions have relatively equal incomes [@wooldridge2020]. If this measure is large, then the interpretation is more problematic, as it does not tell if the high ratio is due to substantial variation in the distribution of per capita GDRPs or the presence of outliers. Nevertheless, maximum to minimum ratio (MMR) provides a quick, easy to comprehend, and politically powerful measure of regional income inequality.
 
 **Standard diviation (SD)**
 
@@ -178,14 +150,6 @@ Calculating SD to quantify the dispersion or variability of a data set around it
 **Median**
 
 The median serves as a robust measure of central tendency, especially when a dataset may have outliers or is skewed. Unlike the mean, the median is not influenced by extreme values and, thus, can provide a clearer picture of the "typical" value in situations where the data distribution is not symmetrical [@wooldridge2020].
-
-### **Time series (Panel data)**
-
-### Cross sectional analysis
-
-### Simple linear regression
-
-### Multiple linear regression
 
 ## Part 1A: Sub-national GDP and GDP per Capita
 
@@ -236,7 +200,7 @@ GDP_per_capita <- merged_data |>
 # we use *100 in order to get the gdp per capita as a percentage, and digits = 2 to limit it down to two decimals
 ```
 
-After calculating the GDP per capita for all NUTS 3 regions within the chosen countries, we can see that there is a large spread between the figures for the various regions. We want to look at regional inequity; in order to do this in a valuable way, countries are divide. Furthermore, gaining important insights on regional differences and utilize. Later to discuss national policy on equity and sustainable economic development in regions.
+When exploring our data we will look at different NUTS levels aswell as countries both together and seperated.
 
 ### GDP per capita Portugal
 
@@ -269,8 +233,11 @@ Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, co
 print(Portugal_data_plot)
 ```
 
+HER NÅ VI BESKRIVE TRENDER
+
 ```{r}
 #| echo: false
+#| output: false
 
 # Calculate summary statistics for Portugal, chosing only GDP per capita 
 summary_stats_portugal <- sapply(Portugal_data["GDP_per_capita"], function(x) c(
@@ -281,13 +248,15 @@ summary_stats_portugal <- sapply(Portugal_data["GDP_per_capita"], function(x) c(
   maximum = max(x)
 ))
 
-# Print the summary statistics
+# Print the summary statistics #APPENDIX
 print(summary_stats_portugal)
 ```
 
-By looking at figure for Portugal, we can see that the GDP per capita in Portugal's regions appears to be fairly consistent. There is however some regional variability. We can see signs of urbanisazation where the regions around the big cities like Lisbon have a higher GDP per capita compared to some more rural areas. Since Lisbon is the capital of Portugal, there is probably a higher concentration of industries, making it a economic center (which again makes the GDP per capita higher).
+Portugal's regional GDP per capita is characterized by relatively consistent values across the country. The descriptive statistics of these values show a mean of approximately 1.42 and a median of 1.39. This close alignment between the mean and median suggests a balanced distribution of economic value across regions.
 
-To continue, we can see that the mean is a little higher that the median, something that might indicate that regions like Lisbon are pulling up the average. If we compare the standard derivation for Portugal with the other countries, we'll see that is fairly low in comparison. This might mean that there is not a lot of variability between the GDP per capita across different regions in Portugal. The gap between minimum and maximum is also low compared to other countries, something that'll also show us that the economic disparity in Portugal might not be as high as it is in other countries.
+Furthermore, the standard deviation is 0.37, indicating a modest variation in GDP per capita across different regions. This is comparatively low when viewed against similar statistics from other countries, suggesting a more uniform economic landscape within Portugal.
+
+Examining the range, the minimum GDP per capita is 0.65, and the maximum is 2.72. The narrow gap between these extremes further supports the observation of limited economic disparity across the regions. While urban areas like Lisbon have higher GDP per capita, indicative of economic concentration, the overall disparity across the country remains relatively low.
 
 ### GDP per capita France
 
@@ -319,6 +288,7 @@ print(France_data_plot)
 
 ```{r}
 #| echo: false
+#| output: false
 
 # Calculate summary statistics for France, chosing only GDP per capita 
 summary_stats_france <- sapply(France_data["GDP_per_capita"], function(x) c(
@@ -333,9 +303,7 @@ summary_stats_france <- sapply(France_data["GDP_per_capita"], function(x) c(
 print(summary_stats_france)
 ```
 
-When looking at the figure for France, we see some regions have a much higher GDP per capita compared to the other regions. The regions with the highest GDP per capita for all years is the île-de-France region, one that also includes Paris. This significant difference between the regions with the highest GDP per capita and the lowest, shows us that there is a high concentration of economic activity and wealth in a few urban regions. Similar to Portugal, we see differences between urban and rural regions.
-
-Just as in Portugal, there is also a higher mean in France as well. On the contary the data in France has higher standard derivation, and the difference between minimum and maximum is larger. This strengthens earlier figures showing, some regions having a high concentration of wealth.
+GDP per capita statistics from France show that the mean is 2.63, indicating an overall high economic status across regions. The median, at 2.44, is lower than the mean, suggesting a distribution skewed towards wealthier areas. The standard deviation is 1.05, highlighting considerable regional economic variability. The range is notably wide, with the minimum GDP per capita at 0.83 and the maximum at 11.58, underscoring stark contrasts. Regions like Île-de-France, encompassing Paris, and affluent areas like the southern Riviera, likely contribute to the high maximum value, illustrating a significant economic divide between urban centres and rural areas.
 
 ### GDP per capita Hungary
 
@@ -365,8 +333,11 @@ Hungary_data_plot <- ggplot(Hungary_data, aes(x = year, y = GDP_per_capita, colo
 print(Hungary_data_plot)
 ```
 
+HVA SKJER HER!
+
 ```{r}
 #| echo: false
+#| output: false
 
 # Calculate summary statistics for Hungary, chosing only GDP per capita 
 summary_stats_hungary <- sapply(Hungary_data["GDP_per_capita"], function(x) c(
@@ -381,9 +352,7 @@ summary_stats_hungary <- sapply(Hungary_data["GDP_per_capita"], function(x) c(
 print(summary_stats_hungary)
 ```
 
-In Hungary, most of the regions have similar GDP per Capita. One region that sticks out by having a higher value, is the region of Budapest, the capital.
-
-This case also record the mean as higher vale than the median, high standard derivation, and a large gap between minimum and maximum.
+In Hungary, the GDP per capita data shows notable regional disparities. With a mean of 0.8598 and a median of 0.765, the higher mean suggests Budapest's significant economic influence. The standard deviation of 0.406 and the wide range from a minimum of 0.32 to a maximum of 3.13 further highlight Budapest's economic dominance compared to other regions.
 
 ### GDP per capita Slovakia
 
@@ -415,6 +384,7 @@ print(Slovakia_data_plot)
 
 ```{r}
 #| echo: false
+#| print: false
 
 # Calculate summary statistics for Slovakia, chosing only GDP per capita 
 summary_stats_slovakia <- sapply(Slovakia_data["GDP_per_capita"], function(x) c(
@@ -429,9 +399,9 @@ summary_stats_slovakia <- sapply(Slovakia_data["GDP_per_capita"], function(x) c(
 print(summary_stats_slovakia)
 ```
 
-Additionally, Slovakia, also have one region with much higher GDP per capita than the rest of the regions. This region is Bratislava, which is the biggest city and the capital, something that might point to this city being the economic centre of Slovakia as well.
+In Slovakia, the GDP per capita statistics reveals significant regional economic differences. The mean GDP per capita is 1.2502, higher than the median of 1.095, indicating that Bratislava, the capital and largest city, may substantially boost the national average due to its economic prominence.
 
-Slovakia follows the trend with higher mean than the median, and a large gap between minimum and maximum. In addition, the standard derivation is significantly high, meaning that there is some regions (or one region in this case) that is further away from the rest of the regions in terms of economic development.
+The large standard deviation of 0.8018 and the extensive range from a minimum of 0.30 to a maximum of 4.02 highlighting urbanization in areas such as Bratislava's distinct economic status. These figures indicate that while most regions have moderate economic levels, Bratislava stand out with a much higher GDP per capita, with its role as the economic centre of Slovakia.
 
 ### GDP per capita Denmark
 
@@ -463,6 +433,7 @@ print(Denmark_data_plot)
 
 ```{r}
 #| echo: false
+#| print: false
 
 # Calculate summary statistics for Denmark, chosing only GDP per capita 
 summary_stats_denmark <- sapply(Denmark_data["GDP_per_capita"], function(x) c(
@@ -477,9 +448,7 @@ summary_stats_denmark <- sapply(Denmark_data["GDP_per_capita"], function(x) c(
 print(summary_stats_denmark)
 ```
 
-Lastly, we see similar pattern in Denmark, with the capital Copenhagen being one of the regions with the highest GDP per capita.
-
-Whith mean higher than the median, showing that regions like Copenhagen possible dragging the mean up by population volume.
+Lastly, In Denmark, with its higher mean of 4.4192 compared to the median of 4.0000 suggests regions like Copenhagen, with its significant economic activity, are likely elevating the national average. The standard deviation of 1.3439 indicates moderate regional economic disparities, while the range from 2.76 to 8.42 reflects Copenhagen's economic prominence relative to other regions.
 
 ## Part 1B: Regional Inequity
 
@@ -951,7 +920,7 @@ To summarize, we can see that the population density is the variable that affect
 
 ### Subset Analysis
 
-To begin the third assignment, we will explore if the effect of development and economic inequality is significantly different between different subsets in our dataset. For our assigned countries, we figured the best way to look at differences between them, is to examine the differences between our biggest country (France) compared to the rest of the countries. In order to compare the two different subsets, we will create a dummy variable. This dummy variable will help us with explaining qualitative values in the regression model.
+When exploring whether the effect of development and economic inequality is significantly different between different subsets. We look at the variantions between our biggest country (France) compared to the rest of the countries.
 
 Choosing France as a dummy variable amongst our group of countries could be justified based on several criteria. Firstly, France stands out as one of the largest economies in this group, both in terms of GDP and global economic influence. This distinction makes France a unique case compared to the smaller economies of Denmark, Portugal, Hungary, and Slovakia. Secondly, France's larger geographical area and population size provide different economic dynamics and complexities, which are not as pronounced in smaller and more homogenous countries. Thirdly, France's economy is more diversified compared to the other countries listed, which might have more specialized or less varied economic structures. This diversity can lead to different patterns in wealth distribution and economic development. Lastly, France's policies, particularly in social welfare and economic regulation, and its larger domestic market, might influence economic outcomes differently than in the smaller economies, where external trade and different policy contexts play a more significant role.
 
@@ -974,29 +943,29 @@ huxreg(list("France" = lmFR, "All other countries" = lmC), statistics = c(N = "n
 
 For France, the regression model shows us a significant and positive relationship between GDP per capita and the Gini coefficient. The intercept is statistically significant, but negative. The positive coefficient of GDP per capita of 0.028 is highly significant with a p-value lower than 0.001; this suggests that when GDP per capita in France rises, then economic inequality rises correspondingly as well. We can also see this by looking at the R-squared of 0.637, indicating that around 63.7% of the variation in the economic inequality can be explained by changes in economic development (GDP per capita). To summarize our findings for France, we can see that economic growth in France can be associated with rising economic inequality, something that could possibly be due to a concentration of wealth in some regions (like Paris for example).
 
-When looking at out other model with the other countries, we can see a different situation. The relationship between GDP per capita and Gini is not statistically significant. The model has a positive, but non-significant coefficient for GDP per capita, which can suggest that variations in this variable dosent have a significant impact on economic inequality. This is also shown by looking at the low R-squared of 0.004 \~ 0.4%, this may mean that GDP per capita only explains a rather small portion of the variance in inequality.
+When comparing France to the rest of the countries, we observe a different situation. Showing the relationship between GDP per capita and Gini is not statistically significant. This model has a positive, but non-significant coefficient for GDP per capita, which can suggest that variations in this variable does not have a significant impact on economic inequality. This is also shown by looking at the low R-squared of 0.004 \~ 0.4%, this may mean that GDP per capita only explains a rather small portion of the variance in inequality.
 
-As we can see, there is a large gap between France and the other countries when it comes to the relationship between economic development and economic inequality.
+Overall we record major differences between France and the other countries when it comes to the relationship between economic development and economic inequality.
 
 ## Exploring Alternative Functional Forms
 
 ### Functional Form Exploration
 
-In addition to the linear model, we can also use other different models in order to explain the relationship between regional development and economic inequality. By using these additional models, we can test different transformations of the variables in order to find the best representation of the data. Some of the models we can use are:
+In addition to the linear model, other models such as logarithmic transformation, the quadratic term and the cubic are useful to explain the relationship between regional development and economic inequality . By using these additional models, we can test different transformations of the variables in order to find the best representation of the data. The addditional models are explained in more details below.
 
 **Logarithmic transformation**
 
-The logarithmic transformation for all the variables allows the coefficients to be interpreted as elasticities, which measure the percentage change in the dependent variable associated with a one percent change in the independent variable [@lessmann2017]. The use of logarithmic transformations is a common practice in econometrics to address issues such as heteroscedasticity and nonlinearity in the data. By using logarithmic transformations, we are able to estimate the relationship between regional inequality and development in a more robust and accurate way [@lessmann2017].
+The logarithmic transformation for all the variables allows the coefficients to be interpreted as elasticizes, which measure the percentage change in the dependent variable associated with a one percent change in the independent variable [@lessmann2017]. The use of logarithmic transformations is a common practice in econometrics to address issues such as heteroscedasticity and non-linearity in the data. By using logarithmic transformations, we are able to estimate the relationship between regional inequality and development in a more robust and accurate way [@lessmann2017].
 
 **The quadratic term**
 
-Furthermore the quadratic term in the regression model is used to investigate the relationship between regional inequality and development [@lessmann2017]. The results suggest an inverted U-shaped relationship between income and inequality, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017].
+The quadratic term in the regression model is used to investigate the relationship between regional inequality and development. The results suggest an inverted U-shaped relationship between income and inequality, as indicated by a negative coefficient for the quadratic term [@lessmann2017]. This implies that initially, as income rises, inequality increases, but after reaching a certain threshold, further increases in income lead to a decrease in inequality [@lessmann2017].
 
 **The cubic function**
 
-The cubic function in the regression model is used to investigate the relationship between regional inequality and development. @lessmann2017 suggest that regional inequalities increase again at very high levels of development, which implies that the relationship between inequality and development looks N-shaped instead of U-shaped [@lessmann2017]. The inclusion of a cubic term in a regression model allows the analysis of more complex dynamics, such as increasing or decreasing marginal effects [@wooldridge2020]. However, interpreting these models can be more challenging, as the effect of a one-unit change in the predictor variable on the dependent variable is no longer constant and depends on the level of the predictor variable.
+The cubic function allows for the exploration of an N-shaped relationship between two variables. As suggested by @lessmann2017, this can be particularly relevant when studying the link between regional inequality and development. In such a scenario, inequality might initially decrease with development, then increase, and eventually decrease again at very high levels of development.
 
-In our analysis, we have chosen to focus on two models: the logarithmic transformation model and the quadratic model. The choice of these models is rooted in both their methodological robustness and their ability to capture the complex nature of the relationship between regional development and income inequality.
+Including a cubic term in a regression model enables the analysis of intricate dynamics, such as changing marginal effects. This is crucial in understanding how the impact of a predictor variable on the outcome variable varies at different levels of that predictor.
 
 ### Estimation and Visualization
 
@@ -1020,9 +989,11 @@ quadratic_modelC <- lm(gini_n2 ~ log(GDP_per_capita) + I(GDP_per_capita^2), filt
 huxreg(list("LinearFR" = linear_modelFR, "LinearC" = linear_modelC, "LogFR" = log_modelFR, "LogC" = log_modelC, "QuadraticFR" = quadratic_modelFR, "QuadraticC" = quadratic_modelC), statistics = c(N = "nobs", R2 = "r.squared", FStat = "statistic", PValue = "p.value"), note = "Note: {stars} T statistics in brackets.")
 ```
 
-We have already seen in the linear regression model earlier that there is a significant positive correlation between GDP per capita and Gini for France, while its non-significant for the rest of the countries. In the logarithmic model, France also show that there is a positive relationship, with an R-squared of 0.490. The other countries still dosent have a significant relationship, and have a R-squared that is zero.
+As earlier predicted there is a significant positive correlation between GDP per capita and Gini for France, while its non-significant for the rest of the countries. In the logarithmic model, R-squared of 0.490 in the French data set demonstrate this. Showing that the model does not explain much of the variance in the dependent variable. Other variables not included in the model might have a significant impact. While the model may still be statistically significant, the low R-squared value suggests that its predictive power is limited. However, the other countries still does not show a significant relationship, with results showing R-squared at zero. Indicates that the independent variables provide very little information about the variation in the dependent variable. This suggests that the model is not a good predictor of the dependent variable. It might be necessary to re-evaluate the model, consider additional variables, or review the underlying assumptions.
 
-For the quadratic model, France have a positive coefficient for squared term of GDP per capita, something that can suggest a U-shaped relationship between the variables. The R-squared for France is 0.682, higher than the R-squared for the other models. The other countries also indicates a U-shaped relationship, and has a R-squared of 0.061; this means that the quadratic model is a better fit than the other models to explain the variance in income inequality.
+For the quadratic model, France show positive coefficient for squared term of GDP per capita, something that can suggest a U-shaped relationship between the variables. The R-squared for France is 0.682, higher than the R-squared for the other models. This implies that the model explains a moderate amount of the variance in the dependent variable. It is a resanoble fit and such values are common in social sciences and economics where the behavior or phenomena being modeled are influenced by many unobserved factors.
+
+The other countries also indicates a U-shaped relationship, despite R-squared levels as low as 0.061 in other words only about 6.1% of the variation in the dependent variable is explained by the independent variable(s) in our model. This indicates a low level of explanatory power. Overall, the quadratic model is a better fit than the other models to explain the variance in income inequality.
 
 #### Logarithmic Model
 
@@ -1045,6 +1016,8 @@ ggplot(france_data, aes(x = log(GDP_per_capita), y = gini_n2)) +
   theme_minimal()
 ```
 
+Even with a logarithmic model, extreme outliers such as those spotted above, at the end of the line can indicate that the relationship captured by the model does not hold as well in these atypical circumstances. It suggests that the economic dynamics of these extremely wealthy regions differ significantly from the average. It's important to carefully assess how these outliers influence our model and consider additional or alternative approaches to capture the complex nature of the relationship between GDP per capita and the Gini coefficient accurately.
+
 ```{r}
 #| echo: false
 
@@ -1064,7 +1037,7 @@ ggplot(other_countries_data, aes(x = log(GDP_per_capita), y = gini_n2)) +
   theme_minimal()
 ```
 
-In the plot for France, we can see a upward trend, which indicated that as the log of GDP per capita increases, the gini coefficient also increases, something that suggests higher income inequality. The data points are scattered around the predicted regression line, which goes upward. This pattern also supports the regression model that shows a significant positive realtionship between the variables. There are some extreme outliers, suggestion that some regions have a higher amount of economic activity (like Paris that is a economic center in France). This also shows that economic growth may lead to increased inequality because of the concentration of wealth in some regions.
+In the plot for France, we can see an upward trend, which indicated that as the log of GDP per capita increases, the gini coefficient also increases, something that suggests higher income inequality. The data points are scattered around the predicted regression line, which goes upward. This pattern also supports the regression model that shows a significant positive realtionship between the variables. There are some extreme outliers, suggesting some regions have a higher amount of economic activity (like Paris that is a economic center in France). This also shows that economic growth may lead to increased inequality because of the concentration of wealth in some regions.
 
 The model for the other countries show that there is not a significant relationship between the variables. The data points also dosen't cluster around the predicted line, which shows that the log of GDP does not explain the variance in the Gini coefficient.
 
@@ -1124,7 +1097,9 @@ In conclusion, while the linear model provides a baseline understanding of the r
 
 ### Heteroskedasticity Testing
 
-The Breusch-Pagan test is used to detect heteroskedasticity in a regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables, which would violate one of the key assumptions of ordinary least squares (OLS) regression.
+Heteroskedasticity is according to @wooldridge2020 an important factor to consider in econometrics and statistical modelling, especially in the context of regression analysis. Heteroskedasticity refers to the condition in regression analysis where the variance of the error terms (residuals) is not constant across all levels of the independent variables \[@wooldridge2020\]. In simpler terms, the spread of the residuals varies at different points in the regression model. Moreover, heteroskedasticity can lead to inefficient estimators and unreliable hypothesis tests. Leading to the assumption of homoscedastic in MRL not being met. In other words the variance of the error terms is not constant across all levels if the independent variables when heteroskedasticity is present.
+
+By conducting a Breusch-Pagan we can detect heteroskedasticity in our regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables. A higher BP value indicates a stronger presence of heteroskedasticity. Degrees of Freedom refers to the number of independent variables in the model. P-value determines the significance of the test result. A low p-value (typically less than 0.05) suggests that the null hypothesis of homoskedasticity (constant variance of errors) can be rejected, indicating heteroskedasticity. If heteroskedasticity is detected, the standard errors of the regression coefficients may be biased, which can lead to incorrect inferences in hypothesis testing.
 
 ```{r}
 #| echo: false
@@ -1151,9 +1126,13 @@ print(bptest_quadFR)
 print(bptest_quadC)
 ```
 
-The Breusch-Pagan test results suggest that the linear and logarithmic models for the other countries and the quadratic models for both France and the other countries exhibit heteroskedasticity. This could have implications for the standard errors and confidence intervals of the coefficients, potentially leading to incorrect inferences about the significance of predictors. The linear model for France does not appear to suffer from this issue.
+In the case of the France, the BP value is 0.25123 with 1 degree of freedom, and a p-value of 0.6162, suggesting no significant evidence of heteroskedasticity, as the p-value is well above the typical threshold of 0.05. However, for the rest of the countries, the BP value is much higher at 83.806, with 1 degree of freedom, and the p-value is less than 2.2e-16, indicating a strong presence of heteroskedasticity. This is also the case for the log model for France and for the rest of the countries. The log model for France has a BP value of 22.971 and a p-value of 1.645e-06, while the log model for the rest shows a BP value of 60.814 and a p-value of 6.273e-15. Both indicate significant heteroskedasticity. The quadratic models exhibit similar trends. The quadratic model for France shows a BP value of 59.658 with 2 degrees of freedom and a p-value of 1.11e-13, which clearly indicates heteroskedasticity. Similarly, the quadratic model for the rest, with a BP value of 18.4, 2 degrees of freedom, and a p-value of 0.0001011, suggests notable heteroskedasticity.
 
-Given these findings, it may be necessary to consider heteroskedasticity-robust standard errors or to transform the data or model specification to address this issue. It is essential to correct for heteroskedasticity to ensure the reliability of the regression analysis.
+Overall, these results, particularly the low p-values in most models, suggest that the null hypothesis of homoskedasticity (constant variance of errors) can be rejected, revealing heteroskedasticity. It is essential to correct for heteroskedasticity to ensure the reliability of the regression analysis. There are several methods to deal with heteroskedasticity, depending on the nature of the data and the specific requirements of the analysis. Residuals vs. Fitted is another way of detecting heteroskedasticity. However, it provides a deeper understanding of the heteroskedasticity's nature and extent
+
+**Residuals vs. Fitted**
+
+The residuals versus fitted values plot is another diagnostic tool that helps in visually identifying issues in a regression model, aiding in improving model accuracy and reliability [@wooldridge2020]. Even after confirming heteroskedasticity. According to @wooldridge2020 It provides a deeper understanding of the heteroskedasticity's nature and extent, which is crucial for effectively addressing it in our regression analysis. Furthermore, the interpretation of different patterns in the plot, like random dispersion indicating a good model fit or systematic patterns indicating issues. Subsiquently, ensuring robust and reliable modeling visual diagnostics, complement statistical tests \[@wooldridge2020\].
 
 ```{r}
 #| echo: false
@@ -1174,13 +1153,13 @@ plot(fitted_values, residuals,
 abline(h = 0, col = "blue", lwd = 2)
 ```
 
-The residuals vs. fitted values plot indicates potential issues with our linear model, which might include heteroskedasticity and model misspecification. The observed patterns and their possible implications, suggests that our model might be missing a nonlinear relationship between the dependent and independent variables. This is a sign of model misspecification, indicating that the current linear model may not be the best fit for our data. The variance in the residuals first increasing, then decreasing, and increasing again, implies that the error terms have non-constant variance, which is a sign of heteroskedasticity. In a well-specified homoscedastic model, the spread of the residuals should be roughly equal across all levels of fitted values.
+There appears to be a pattern in the residuals; they are not randomly dispersed around the horizontal line but show a curve-like trajectory as the fitted values increase. This pattern suggests non-random error variance, which is indicative of non-linearity in the relationship between the independent and dependent variables, or it could also suggest heteroskedasticity. Ideally, if the model was a perfect fit, the residuals would be randomly scattered around the zero line (the horizontal blue line in your plot) without any discernible pattern. This would indicate homoskedasticity and a good linear fit. The pattern we are seeing in our residuals plot suggests that our linear model may not be the best representation of the relationship between the variables. It could be that a non-linear model would provide a better fit or that there are other variables or transformations that should be considered. Understanding this plot is important because it directly relates to the assumptions underlying linear regression.
+
+The observed patterns and their possible implications, suggests that our model might be missing a nonlinear relationship between the dependent and independent variables. This is a sign of model misspecification, confirming that the current linear model may not be the best fit for our data. The variance in the residuals first increasing, then decreasing, and increasing again, implies that the error terms have non-constant variance, which is a sign of heteroskedasticity.
 
 ### Causality Discussion:
 
-The Breusch-Pagan tests have confirmed the presence of heteroskedasticity in most of our models, especially for the other countries. This suggests that the assumption of homoscedasticity is violated in these models. Heteroskedasticity and patterns in the residuals can lead to inefficient estimates and undermine the causal interpretation of the models. When the error variance changes across observations, the standard errors of the coefficient estimates may be biased, leading to incorrect conclusions about the significance of predictors.
-
-The best strategies to address these issues might be to use heteroskedasticity-robust standard errors (White's standard errors), apply transformations to the dependent variable, or using weighted least squares (WLS). These strategies can help mitigate issues and lead to more robust conclusions.
+The statistical relationship between two variables does not imply that one causes the other. Correlation can be due to a causative relationship or due to both variables being influenced by a third factor. Establishing causation means demonstrating that changes in one variable directly result in changes in another. To claim causality, econometricians typically need to demonstrate three things. Firstly, temporal Precedence meaning the cause must precede the effect in time. Secondly, covariation of the Cause and Effect. When the cause happens, the effect happens; when the cause doesn't happen, the effect doesn't happen. Lastly, no Plausible Alternative Explanations meaning there should be no other factors that can explain the relationship between the cause and effect.
 
 ## Panel Estimates
 
@@ -1224,3 +1203,31 @@ huxreg(plm1, plm2, plm3, plm4, statistics = c("nobs","r.squared","adj.r.squared"
 ### Panel Estimation Discussion
 
 # References
+
+# Appendix
+
+```{r summary-stats-appendix, echo=FALSE}
+# Descriptive statistics GDP per capita, mean, min, max, SD
+
+## Summary Statistics
+# Print the summary statistics for Portugal
+
+cat("Summary Statistics for Portugal's GDP Per Capita:\n")
+print(summary_stats_portugal)
+
+# Print the summary statistics for France
+cat("\nSummary Statistics for France's GDP Per Capita:\n")
+print(summary_stats_france)
+
+# Print the summary statistics for Hungary
+cat("\nSummary Statistics for Hungary's GDP Per Capita:\n")
+print(summary_stats_hungary)
+
+# Print the summary statistics for Slovakia
+cat("\nSummary Statistics for Slovakia's GDP Per Capita:\n")
+print(summary_stats_slovakia)
+
+# Print the summary statistics for Denmark
+cat("\nSummary Statistics for Slovakia's GDP Per Capita:\n")
+print(summary_stats_denmark)
+```
