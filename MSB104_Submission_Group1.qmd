@@ -47,11 +47,11 @@ Lastly, it is worth noting potential limitations may arise due to the use of Cha
 
 # Literature Review: Regional Economic Growth, Inequality and determines (2000-2020)
 
-Why some places grow and prosper is a fundamental question in the field of social science. This question motivated Adam Smith's \[1863\] work and has been a major influence of the *new economic geography* [@feldman2014]*. Furthermore,* regional growth and inequality have been important topics of research in Europe for many years. Despite the European commission\'s efforts to decrease income gaps, significant disparities in income and economic development persist across regions in Europe [@lessmann2017].
+Why some places grow and prosper is a fundamental question in the field of social science. This question motivated Adam Smith's \[1863\] work and has been a major influence of the *new economic geography* [@feldman2014]*. Furthermore,* regional growth and inequality have been important topics of research in Europe for many years. Despite the European commission's efforts to decrease income gaps, significant disparities in income and economic development persist across regions in Europe [@lessmann2017].
 
 **Economic Growth and Regional Disparities**
 
-Regional growth in Europe reveals a complex pattern, influenced significantly by factors such as geography, human capital, and economic policies. Wealthier nations like Denmark tend to experience quicker regional convergence, a phenomenon supported by \[@gennaioli2014\] findings.
+Regional growth in Europe reveals a complex pattern, influenced significantly by factors such as geography, human capital, and economic policies. Wealthier nations like Denmark tend to experience quicker regional convergence, a phenomenon supported by [@gennaioli2014] findings.
 
 **Financial crisis, and EU membership for Slovakia and Hungary**
 
@@ -59,7 +59,7 @@ The 2008 financial crisis disrupted regional growth and worsened income inequali
 
 **Regional inequality**
 
-The effect that surprised us most was that the economic crisis led to increase inequality\[@nguyen2022\]. indicate that any type of financial crisis results in higher income inequality. Furthermore,  @lessmann2017 address the importance of studying these aspects. Moreover, its potential consequences, such as political tensions that can undermine social and political stability [@lessmann2017].
+The effect that surprised us most was that the economic crisis led to increase inequality[@nguyen2022]. indicate that any type of financial crisis results in higher income inequality. Furthermore,  @lessmann2017 address the importance of studying these aspects. Moreover, its potential consequences, such as political tensions that can undermine social and political stability [@lessmann2017].
 
 **Determinants of regional inequality**
 
@@ -81,7 +81,7 @@ Overall, it is evident that regional economic growth and inequality in Europe fr
 
 ## **Data collection**
 
-All dataset used in this paper is from Eurostat and based on the Nomenclature of Territorial Units for Statistics (NUTS) classification. The NUTS system provides a hierarchical classification of the EU\'s economic territory, facilitating the collection and harmonization of European statistics, and ranges from the national level (NUTS 0) to smaller regional divisions (NUTS 3).
+All dataset used in this paper is from Eurostat and based on the Nomenclature of Territorial Units for Statistics (NUTS) classification. The NUTS system provides a hierarchical classification of the EU's economic territory, facilitating the collection and harmonization of European statistics, and ranges from the national level (NUTS 0) to smaller regional divisions (NUTS 3).
 
 The collected data for GDP per capita includes values in current prices and those adjusted for purchasing power parity (PPP), enabling comparisons by accounting for price level differences. GDP at market prices measures the total economic output within regions, adjusted by taxes, subsidies, and not delineated by specific sectors.
 
@@ -1072,7 +1072,7 @@ In conclusion, while the linear model provides a baseline understanding of the r
 
 #### Heteroskedasticity Testing
 
-Heteroskedasticity is according to @wooldridge2020 an important factor to consider in econometrics and statistical modelling, especially in the context of regression analysis. Heteroskedasticity refers to the condition in regression analysis where the variance of the error terms (residuals) is not constant across all levels of the independent variables \[@wooldridge2020\]. In simpler terms, the spread of the residuals varies at different points in the regression model. Moreover, heteroskedasticity can lead to inefficient estimators and unreliable hypothesis tests. Leading to the assumption of homoscedastic in MRL not being met. In other words the variance of the error terms is not constant across all levels if the independent variables when heteroskedasticity is present.
+Heteroskedasticity is according to @wooldridge2020 an important factor to consider in econometrics and statistical modelling, especially in the context of regression analysis. Heteroskedasticity refers to the condition in regression analysis where the variance of the error terms (residuals) is not constant across all levels of the independent variables [@wooldridge2020]. In simpler terms, the spread of the residuals varies at different points in the regression model. Moreover, heteroskedasticity can lead to inefficient estimators and unreliable hypothesis tests. Leading to the assumption of homoscedastic in MRL not being met. In other words the variance of the error terms is not constant across all levels if the independent variables when heteroskedasticity is present.
 
 By conducting a Breusch-Pagan we can detect heteroskedasticity in our regression model. The test works by checking if the variances of the errors from the regression are dependent on the values of the independent variables. A higher BP value indicates a stronger presence of heteroskedasticity. Degrees of Freedom refers to the number of independent variables in the model. P-value determines the significance of the test result. A low p-value (typically less than 0.05) suggests that the null hypothesis of homoskedasticity (constant variance of errors) can be rejected, indicating heteroskedasticity. If heteroskedasticity is detected, the standard errors of the regression coefficients may be biased, which can lead to incorrect inferences in hypothesis testing.
 
@@ -1107,7 +1107,7 @@ Overall, these results, particularly the low p-values in most models, suggest th
 
 **Residuals vs. Fitted**
 
-The residuals versus fitted values plot is another diagnostic tool that helps in visually identifying issues in a regression model, aiding in improving model accuracy and reliability [@wooldridge2020]. Even after confirming heteroskedasticity. According to @wooldridge2020 It provides a deeper understanding of the heteroskedasticity's nature and extent, which is crucial for effectively addressing it in our regression analysis. Furthermore, the interpretation of different patterns in the plot, like random dispersion indicating a good model fit or systematic patterns indicating issues. Subsiquently, ensuring robust and reliable modeling visual diagnostics, complement statistical tests \[@wooldridge2020\].
+The residuals versus fitted values plot is another diagnostic tool that helps in visually identifying issues in a regression model, aiding in improving model accuracy and reliability [@wooldridge2020]. Even after confirming heteroskedasticity. According to @wooldridge2020 It provides a deeper understanding of the heteroskedasticity's nature and extent, which is crucial for effectively addressing it in our regression analysis. Furthermore, the interpretation of different patterns in the plot, like random dispersion indicating a good model fit or systematic patterns indicating issues. Subsiquently, ensuring robust and reliable modeling visual diagnostics, complement statistical tests [@wooldridge2020].
 
 ```{r}
 #| echo: false
@@ -1181,7 +1181,7 @@ huxreg(plm1, plm2, plm3, plm4, statistics = c("nobs","r.squared","adj.r.squared"
 
 # Limitations and Future Research
 
-# Conclusion 
+# Conclusion
 
 # Appendix
 
