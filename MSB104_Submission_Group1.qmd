@@ -33,65 +33,51 @@ library(lmtest)
 
 # Introduction
 
-While national GDP and GDP per capita are vital indicators of a country's aggregate economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, paradoxically, coexist with pockets of regional deprivation [@lessmann2017].
+While national GDP and GDP per capita are vital indicators of a country's collective economic health, they do not shed light on how wealth or income is distributed among its residents. A high national GDP can, unexpectedly, coexist with pockets of regional deprivation [@lessmann2017]. The truth of this statement becomes more evident when taking a closer look at sub-national data. Regional wealth disparities are of prime concern, especially when crafting policies for equitable growth [@lessmann2017]. Furthermore, a country's macro-level prosperity does not automatically guarantee, that all its regions partake equally in this wealth. By studying smaller regions within a country, it is possible to get a healthier narrative about the state of regional economic disparities [@lessmann2017].
 
-The truth of this statement becomes more evident when taking a closer look at sub-national data. Regional wealth disparities are of prime concern, especially when crafting policies for equitable growth [@lessmann2017]. A country's macro-level prosperity does not automatically guarantee that all its regions partake equally in this wealth. By studying smaller regions within a country, it is possible to get a more nuanced narrative about the state of regional economic disparities [@lessmann2017].
+The aims are to acquire, process, and analyse sub-national GDP, GINI and population data for a subset of European countries. Using regression models with time series data, cross-sectional and panel data observations we investigate economic growth and inequality trends in; Portugal, France, Hungary, Slovakia and Denmark in the time period 2000 to 2020.
 
-Using time series data and cross-sectional observations we investigate Economic growth and Inequality trends in Portugal, France, Hungary, Slovenia and Denmark in the time period 2000 to 2020. The aims are to acquire, process, and analyse sub-national GDP, GINI and population data for a subset of European countries.
+Moreover, the primary objective is to gain knowledge of econometric methods used for science in business through our given topic. Subsequently, econometric terms and definitions are explained in greater detail than it normally would in similar papers.
 
-The primary objective is to gain knowledge of econometric methods used for science in business through our given topic. Subsequently, econometric terms and definitions are explained in greater detail than it normally would in similar papers. Using GDP per capita and the Gini coefficient. Moreover, both are vital indicators in the field of economics and are frequently used, in a wide array of studies. Furthermore, to analyse and interpret the economic conditions and social disparities of different regions or countries. Their analysis provides crucial insights for policymakers, economists, and researchers in shaping and evaluating the effectiveness of socio-economic policies.
+The research question ***"What are the regional economic growth and inequality measurements from 2000 to 2020, in selected European countries and how does other*** ***determinants affect the results?"*** is key in guiding our study. Setting a solid foundation for a comprehensive study that not only measure our given parameters, but also a critically examination of the role of determinants such as transportation infrastructure and education. @lessmann2017 states that transportation costs play an important role in agglomeration and income, and reduced transportation costs.
 
-The research question ***"What are the regional economic growth and inequality measurements from 2000 to 2020, in selected European countries and how does other*** ***determinants affect the results?"*** is key in guiding our study. Setting a solid foundation for a comprehensive study that not only measure our given parameters, but also a critically examination of the role of determinants such as transportation infrastructure and education. @lessmann2017 states that transportation costs play an important role in agglomeration and income, and reduced transportation costs as a determinant of regional inequality.
+The structure of our study is methodically designed to facilitate this exploration. In part 1A and B we calculate GDP per capita and explore regional inequality using various descriptive statistics and visualizations such as panel data. In part 2A and B we use cross sectional method to examine the relationship between regional development and inequality, employing cross sectional estimation techniques for the year 2010. Furthermore, exploring alternative functional forms and implementing panel estimation to analyse the relationship between regional development inequality.
 
-The sructure of our study is methodically designed to facilitate this exploration. In part 1A and B we calculate GDP per capita and explore regional inequality using various descriptive statistics and visualizations such as panel data (***Assignment_1***). In part 2A and B we use cross sectional method to examine the relationship between regional development and inequality, employing cross sectional estimation techniques for the year 2010 (***Assignment_2***). Furthermore, exploring alternative functional forms and implementing panel estimation to analzise the relationship between regional development inequality (***Assignment_3***).
-
-Lastly, it is worth noting potential limitations may arise due to the use of ChatGPT and ChatGPT PDF, which have been utilized as tools to gain understanding and extract knowledge from academic papers, as well as to explain econometric terms and definitions. The text generated by these tools has been cross-checked to the best of our knowledge with our textbook and Andre Seidel, lecturer and author of 'Regional Inequality, Convergence, and Its Determinants -- A View from Outer Space' (2017). Despite these precautions, there may be instances where incorrect information was provided, and some errors could have been overlooked. The text has been meticulously rewritten to fit our style of writing, ensuring consistency and accuracy throughout our study.
+Lastly, it is worth noting potential limitations may arise due to the use of ChatGPT and ChatGPT PDF, which have been utilized as tools to gain understanding and extract knowledge from academic papers, as well as to explain econometric terms and definitions. The text generated by these tools has been cross-checked to the best of our knowledge with our textbook and Andre Seidel, lecturer, and author of 'Regional Inequality, Convergence, and Its Determinants -- A View from Outer Space' (2017). Despite these precautions, there may be instances where incorrect information was provided, and some errors could have been overlooked.
 
 # Literature Review: Regional Economic Growth, Inequality and determines (2000-2020)
 
-Why some places grow and prosper is a fundamental question in social science research. This question motivated Adam Smith's work, *An Inquiry into the Nature and Causes of the Wealth of Nations,* (Smith [1863](https://link-springer-com.galanga.hvl.no/article/10.1007/s11187-014-9574-4#ref-CR32 "Smith, A. (1863). An inquiry into the nature and causes of the wealth of nations. Edinburgh: A. & C Black.")) and has been a major influence of the *new economic geography* [@feldman2014]*. Furthermore,* regional growth and inequality have been important topics of research in Europe for many years. In recent decades, the European Union implemented policies aimed at reducing regional disparities and promoting economic growth across its member states. Furthermore, despite these efforts, significant disparities in income and economic development persist across regions in Europe [@lessmann2017].
+Why some places grow and prosper is a fundamental question in the field of social science. This question motivated Adam Smith's \[1863\] work and has been a major influence of the *new economic geography* [@feldman2014]*. Furthermore,* regional growth and inequality have been important topics of research in Europe for many years. Despite the European commission's efforts to decrease income gaps, significant disparities in income and economic development persist across regions in Europe [@lessmann2017].
 
 **Economic Growth and Regional Disparities**
 
-Regional growth in Europe exhibits a complex pattern, influenced significantly by factors such as geography, human capital, and economic policies. Lessmann and Seidel's research offers insights into these dynamics, highlighting the persistence of income disparities, across regions despite overarching economic advancement [@lessmann2017]. Wealthier nations like Denmark tend to experience quicker regional convergence, a phenomenon supported by Gennaioli et al.'s findings [@gennaioli2014].
+Regional growth in Europe reveals a complex pattern, influenced significantly by factors such as geography, human capital, and economic policies. Wealthier nations like Denmark tend to experience quicker regional convergence, a phenomenon supported by [@gennaioli2014] findings.
 
 **Financial crisis, and EU membership for Slovakia and Hungary**
 
-The 2008 financial crisis significantly disrupted regional growth and exacerbated income inequalities across Europe. Nguyen et al. highlight that financial turmoil typically leads to increased income disparity; a trend observed globally [@nguyen2022].
-
-Focusing on Europe, we expect varied regional economic performances, especially when comparing Eastern European countries such as Hungary and Slovakia to their Western counterparts. Given the role of capital market regulations in promoting regional convergence, outlined by Gennaioli et al., we anticipate a potential growth acceleration. In particular for Eastern European countries following their EU accession in 2003 and 2004 [@gennaioli2014]. However, the financial crisis and subsequent labour market shifts may also have influenced these trends.
-
-EU membership provided Slovakia and Hungary with resources for economic recovery, while Western European countries, including Denmark, Portugal, and France, likely experienced significant economic declines due to the financial crisis, a pattern possibly mirrored in the recent COVID-19 pandemic. In particular Portugal as the crisis hit them harder. These complexities highlight the importance of a detailed analysis to understand regional economic growth and inequality in challenging times.
+The 2008 financial crisis disrupted regional growth and worsened income inequalities across Europe. Nguyen et al. (2022) highlight that financial instability typically leads to increased income disparity; a trend observed globally. Focusing on Europe, we expect varied regional economic performances, especially when comparing Eastern European countries such as Hungary and Slovakia to their Western counterparts. Given the role of capital market regulations in promoting regional convergence, outlined by Gennaioli et al (2014), we anticipate a potential growth acceleration after submission.  EU membership provided Slovakia and Hungary with resources for economic recovery, while Western European countries, including Denmark, Portugal, and France, likely experienced significant economic declines due to the financial crisis. This pattern possibly mirrored in the recent COVID-19 pandemic. These complexities highlight the importance of a detailed analysis to understand regional economic growth and inequality in challenging times.
 
 **Regional inequality**
 
-Another affect that surprised us was that the economic crisis led to increase inequality. The study "*the effects of financial crisis on regional inequality*" indicate any type of financial crisis results in higher income inequality [@nguyen2022].
-
-@lessmann2017 regional inequality study address the importance of studying these aspects. Its potential consequences, such as political tensions that can undermine social and political stability [@lessmann2017]. The paper also discusses the relationship between regional inequality and personal income inequality and conflict risk.
+The effect that surprised us most was that the economic crisis led to increase inequality[@nguyen2022]. indicate that any type of financial crisis results in higher income inequality. Furthermore,  @lessmann2017 address the importance of studying these aspects. Moreover, its potential consequences, such as political tensions that can undermine social and political stability [@lessmann2017].
 
 **Determinants of regional inequality**
 
-Geographic characteristics stand out as pivotal, with the natural and topographical elements of a region significantly swaying income distributions [@lessmann2017].
-
-Urbanization emerges as a crucial determinant, where bustling, populous around urban centers usually enjoy elevated income levels, contrasting starkly with the often-stark disparities witnessed in more rural and secluded areas [@lessmann2017].
-
-*Transport infrastructure and Education*
+Geographic characteristics stand out as fundamental, with the natural and topographical elements of a region shifting income distributions [@lessmann2017]. Urbanization emerges as a crucial determinant, where active, populations around urban centres usually enjoy raised income levels, contrasting with the disparities witnessed in more rural and secluded areas [@lessmann2017].
 
 Transport infrastructure plays a central role in shaping regional economic landscapes. Improved connectivity fosters economic activities, reduces travel time, and enhances accessibility to markets and resources. Studies indicates that regions with robust transport infrastructure tend to attract more investments, generate employment, and ultimately contribute to regional prosperity.
 
-[@lessmann2017] also discusses the determinant of Education in the context of human capital. The study mentions that human capital is the most important determinant of differences in regional development within countries. The study also notes that human capital creates positive externalizes, which can spill over regional boundaries. Moreover, the quality of human capital within countries, as measured by the secondary-school enrollment rate, can decrease regional inequality by facilitating regional spillovers and convergence. Lastly, promoting internal migration.
+[@lessmann2017] also discusses the determinant of Education in the context of human capital. The study mentions that human capital is the most important determinant of differences in regional development within countries. Moreover, the quality of human capital within countries, as measured by the secondary-school enrolment rate, can decrease regional inequality by facilitating regional spillovers and convergence. Lastly, promoting internal migration.
 
-**Expected Inverted U- and N shaped curves**
+**Expected Inverted U- and N shaped curves (er dette riktig?!?, se tilbakemelding)**
 
-Furthermore, @lessmann2017 provides us with insights into the inverted U-shaped relationship between regional inequality and the level of economic development in different country groups [@lessmann2017]. The inverted U-shape also referred to as Kuznets Curve suggests that as an economy develops, regional inequality initially rises, reaches a peak, and then starts to decline.
+@lessmann2017 provides insights into the inverted U-shaped relationship between regional inequality and the level of economic development in different country groups [@lessmann2017]. The inverted U-shape also referred to as Kuznets Curve suggests that as an economy develops, regional inequality initially rises, reaches a peak, and then starts to decline. Additionally, there is an N-shaped relationship between regional inequality and economic development according to \@lessmann2017. Subsequently, regional inequality increases again after the inverted U-shaped pattern has been completed [@lessmann2017].
 
-@lessmann2017 paper also finds that there is an N-shaped relationship between regional inequality and economic development, which means that regional inequality increases again after the inverted U-shaped pattern has been completed [@lessmann2017].
+Lastly, [@iammarino2019] argue that there are some countries in the EU that are more evenly developed than others, and that a map of underperformance or over-performance means less in a high-income but evenly developed country, such as in Denmark in our case [@iammarino2019]. On the other hand, France has been a subject of discussion and policy making for many years, regarding its well-known pockets of extreme wealth in regions such as Cap d'Antibes.
 
-@iammarino2019 discusses regional inequalities in European countries. It presents evidence that inter-regional inequality has been increasing in the European Union since the turn of the millennium. The authors argue that this is due to the existence of several groups of regional economies in Europe that are structurally very different from one another [@iammarino2019]. Additionally, the authors argue that there are some countries in the EU that are more evenly developed than others, and that a map of under performance or over-performance means less in a high-income but evenly developed country, such as in Denmark in our case [@iammarino2019]. On the other hand, France has been a subject of discussion and policy making for many years, regarding its well-known pockets of extreme wealth in regions such as Cap d'Antibes.
+Overall, it is evident that regional economic growth and inequality in Europe from 2000 to 2020 have been influenced by several factors, with transport infrastructure and education emerging as significant determinants. Earlier studies provide us with a fundamental understanding of these dynamics, while also highlighting the impacts of economic crises on regional disparities. The integration of transport infrastructure and education adds an additional layer of complexity, underscoring its potential as a catalyst for regional development and equality.
 
-Overall, it is evident that regional economic growth and inequality in Europe from 2000 to 2020 have been influenced by a constellation of factors, with transport infrastructure and education emerging as significant determinants. Earlier studies provide us with a fundamental understanding of these dynamics, while also highlighting the nuanced impacts of economic crises on regional disparities. The integration of transport infrastructure and education into this discourse adds an additional layer of complexity, underscoring its potential as a catalyst for regional development and equality.
-
-# Data and Descriptive
+# Data and Methodology
 
 ## **Data collection**
 
@@ -220,6 +206,8 @@ Portugal_data <- GDP_per_capita |>
 
 ```{r}
 #| echo: false
+#| label: fig-1
+#| fig-cap: "GDP per capita Portugal"
 
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Portugal. 
 
@@ -228,14 +216,16 @@ Portugal_data_plot <- ggplot(Portugal_data, aes(x = year, y = GDP_per_capita, co
   labs(title="Figure 1: GDP per Capita for Portugal", 
        x="Year",
        y="GDP per Capita") +
-  theme(legend.position="none")
+    theme(legend.position="none")
 
 # Print out the figure
 
 print(Portugal_data_plot)
 ```
 
-HER kommer BESKRIVE TRENDER
+The graph depicts a 20-year upward trend in GDP per capita across Portugal's regions, illustrating resilience and economic recovery despite various setbacks. Three regions have noticeable higher GDP per capita than the rest among those Alentejo Central (top, green) and Algarve (top, purple) as well as areas around the capital Lisbon (top, blue). The first two regions experienced significant growth, bolstered by factors like human capital development and a thriving tourism industry. This growth, however, was followed by a notable dip around 2008, reflecting these regions' sensitivity to global economic shifts and their reliance on tourism. The Metropolitan Area of Lisbon (Top Blue), while also impacted, showed less fluctuation during this period, indicative of its more diverse economic base.
+
+Post-financial crisis, there was a clear trend of recovery and return to growth across the regions, demonstrating their ability to adapt and rebound from economic challenges. However, the onset of the COVID-19 pandemic introduced a universal decline in all regions, underscoring the extensive impact of global health crises on regional economies. This pandemic-induced downturn mirrors global economic trends, where financial instability, as noted by Nguyen et al. (2022), often exacerbates regional economic hardships.
 
 ```{r}
 #| echo: false
@@ -275,6 +265,8 @@ France_data <- GDP_per_capita |>
 
 ```{r}
 #| echo: false
+#| #| label: fig-2
+#| fig-cap: "GDP per capita France"
 
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in France. 
 
@@ -322,6 +314,8 @@ Hungary_data <- GDP_per_capita |>
 
 ```{r}
 #| echo: false
+#| #| label: fig-3
+#| fig-cap: "GDP per capita Hungary"
 
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Hungary. 
 
@@ -371,6 +365,8 @@ Slovakia_data <- GDP_per_capita |>
 
 ```{r}
 #| echo: false
+#| label: fig-4
+#| fig-cap: "GDP per capita Slovakia"
 
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Slovakia. 
 
@@ -386,7 +382,7 @@ print(Slovakia_data_plot)
 
 ```{r}
 #| echo: false
-#| print: false
+#| output: false
 
 # Calculate summary statistics for Slovakia, chosing only GDP per capita 
 summary_stats_slovakia <- sapply(Slovakia_data["GDP_per_capita"], function(x) c(
@@ -420,6 +416,8 @@ Denmark_data <- GDP_per_capita |>
 
 ```{r}
 #| echo: false
+#| label: fig-5
+#| fig-cap: "GDP per capita Denmark"
 
 # Making a figure using ggplot that shows us variations of GDP per capita across the different NUTS 3 regions in Denmark. 
 
@@ -437,7 +435,7 @@ Beskrivelse kommer! :D
 
 ```{r}
 #| echo: false
-#| print: false
+#| output: false
 
 # Calculate summary statistics for Denmark, chosing only GDP per capita 
 summary_stats_denmark <- sapply(Denmark_data["GDP_per_capita"], function(x) c(
@@ -512,6 +510,8 @@ After calculating the GINI, we observe similarities to the GDP per capita data f
 
 ```{r}
 #| echo: false
+#| label: fig-6
+#| fig-cap: "Bar chart"
 
 # Creating a bar chart
 ggplot(gini_filtered, aes(x = id_nuts2, y = gini_n2, fill = id_nuts0)) +
@@ -526,6 +526,8 @@ The chart underscores the varied landscape of income inequality within European 
 
 ```{r}
 #| echo: false
+#| label: fig-7
+#| fig-cap: "Time-series plot"
 
 # Creating a time-series plot
 ggplot(gini_filtered, aes(x = year, y = gini_n2, color = id_nuts2)) +
@@ -535,28 +537,41 @@ ggplot(gini_filtered, aes(x = year, y = gini_n2, color = id_nuts2)) +
   ylab("Gini Coefficient")
 ```
 
+Ska me ha med denne? er det egentlig nødvendig??
+
 ```{r}
 #| echo: false
+#| output: false
+#| label: fig-8
+#| fig-cap: "Box plot"
 
 # Creating a box plot
 ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
   geom_boxplot() +
+  ggtitle("Plot 1: Distribution of GDP per Capita by Country") +
+  xlab("Country") +
+  ylab("GDP per Capita")
+
+# Saving the plot for referencing in the appendix
+g <- ggplot(gini_filtered, aes(x = id_nuts0, y = GDP_per_capita)) +
+  geom_boxplot() +
   ggtitle("Distribution of GDP per Capita by Country") +
   xlab("Country") +
   ylab("GDP per Capita")
+
+# Save the plot as an image file
+ggsave("GDP_per_Capita_Boxplot.png", plot = g, width = 10, height = 6)
 ```
 
-# Cross sectional estimates
+The box plots (in the appendix) provide a distinct perspective on the data, independent of the assumptions typically associated with other statistical distributions. This method of visualization highlights Denmark as having the highest overall GDP per capita across its regions. France, while not having the overall highest GDP per capita, demonstrates significant variability, especially when considering its outliers. Hungary, in contrast, is still presenting the lowest GDP per capita. These insights, derived from the box plot analysis, augment our understanding from previous descriptive statistics, bar plots, and time series analyses, offering a more nuanced view of the GDP per capita distribution among these countries.
+
+bør kanskje skrive noe mer om hva gini er, tror det står på side 116 eller 106 i artikkel
+
+# Empirical Findings
+
+## Cross sectional estimates
 
 ## Part 2A: Growth and Inequity
-
-### **Data acquisition**
-
-Firstly, the data is summerised for the year 2010 at the NUTS2 regional level, focusing on economic metrics. Processing the dataset containing the NUTS3 level. Thereafter, computing the total GDP and total population for each NUTS2 region and year. Then, derive the GDP per capita at the NUTS2 level by dividing the total GDP by the total population again. Furthermore, narrowing down the dataset to observations from the year 2010 where the Gini coefficient is positive. Then adding, logarithmic transformations to linearize relationships or to reduce the impact of extreme values.
-
-The next step is making a data frame of NUTS2 2010 and grouping by NUTS0 country level variables, as well as allocating NUTS2 to selected countries. Lastly presenting data in **table XXX** showing a count of NUTS2 regions within each top-level region or country in the 2010 data.
-
-The next step is, estimating a Linear Regression for All Countries using cross sectional data from 2010, NUTS2.
 
 ### **Cross Sectional Analysis**
 
@@ -602,17 +617,9 @@ $GINI = \beta_{0} + \beta_{1} \cdot \text{GDP per capita} + \epsilon$
 
 #### **Goodness of fit**
 
-The goodness of fit in a simple linear regression model measures how well the regression line approximates the real data points. The regression line that best represents the data according to the least squares criterion, which minimizes the sum of the squared vertical distances of the points from the line.
+The goodness of fit in simple linear regression, evaluated by R\^2, gauges how well the regression line fits the data. This line is determined using the least squares criterion, minimizing squared differences between data points and the line. R\^2 varies from 0 to 1, where 0 indicates no explanatory power and 1 signifies perfect fit. A higher R\^2 suggests a better model fit. For an effective model, data should linearly align with minimal patterns in residuals, assuming all linear regression prerequisites are met.
 
-R\^2 is a statistical measure that represents the proportion of the variance for the dependent variable that's explained by the independent variable. It ranges from 0 to 1. A higher R\^2 value indicates a better fit of the model to the data.
-
-R\^2 = 0 The model does not explain any of the variability of the response data around its mean.
-
-R\^2 = 1 The model explains all the variability of the response data around its mean.
-
-If the assumptions for a simple linear regression are met, it indicates a good fit for the model. [Plotting the data can provide a visual indication of the goodness of fit.]{.underline} The points should fall around a straight line without clear patterns in the residuals. As it is crucial to verify these assumptions before proceeding with interpreting the results of the regression analysis.
-
-**Residuals vs. Fitted Values Plot** to check for homoscedasticity and linearity. Ideally, this plot shows no pattern; the residuals are randomly scattered around the horizontal line at zero. If there's a pattern (like a curve or systematic spread of residuals), it suggests non-linearity or heteroscedasticity.
+**Residuals vs. Fitted Values Plot** is used to check for homoscedasticity and linearity. Ideally, this plot shows no pattern; the residuals are randomly scattered around the horizontal line at zero. If there's a pattern (like a curve or systematic spread of residuals), it suggests non-linearity or heteroscedasticity.
 
 **Normal Q-Q Plot** to check if the residuals are approximately normally distributed. The points should fall roughly along a straight line. Deviations from a straight line suggest deviations from normality.
 
@@ -628,8 +635,11 @@ data2010 <- gini_nuts_2 |>
 
 ```{r}
 #| echo: false
-#| fig-cap: Regression statistics of all countries for the year 2010
+#| output: false
+#| label: tbl-1
+#| fig-cap: "Regression analysis all countries combined for the year 2010"
 
+# Made a copy for appendix
 # Finding the natural logarithm of GDP per capita
 data2010 <- data2010 |> 
   mutate(log_GDP_per_capita = log(GDP_per_capita))
@@ -649,8 +659,11 @@ huxreg(All = lm,
 
 ```{r}
 #| echo: false
-#| fig-cap: Regression statistics of all countries seperately for the year 2010
+#| output: false
+#| label: tbl-2
+#| fig-cap: "Regression statistics of all countries seperately for the year 2010"
 
+#Appendix 
 # Estimation for each country seperately 
 lmSK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "SK"))
 lmDK <- lm(gini_n2 ~ log_GDP_per_capita, subset(data2010, id_nuts0 == "DK"))
@@ -693,60 +706,38 @@ We also examined our selected countries seperately in order to see how the relia
 
 **Ordinary Least Squares (OLS) Estimation**
 
-"The OLS method is employed to identify the best-fitting linear relationship between the dependent and independent variables, aiming to minimize the sum of squared residuals. This technique ensures that the estimations of the intercept (β0) and slope (β1) yield the least possible cumulative discrepancy between the actual and predicted values. The strength of OLS lies in its closed-form solution, providing a straightforward computation of coefficients directly from the data-set, without necessitating iterative procedures.
+The OLS method is according to @wooldridge2020 employed to identify the best-fitting linear relationship between the dependent and independent variables, aiming to minimize the sum of squared residuals. Furthermore, this technique ensures that the estimations of the intercept (β0) and slope (β1) yield the least possible cumulative discrepancy between the actual and predicted values. The strength of OLS lies in its closed-form solution, providing a straightforward computation of coefficients directly from the dataset, without necessitating iterative procedures. According to @wooldridge2020 the following assumtions need to be met to achieve BLUE.
 
-Furthermore, when the classical linear regression assumptions are met, OLS guarantees that the estimators are BLUE, ensuring their unbiasedness and efficiency. This is particularly crucial in econometric analysis, where the precision and reliability of parameter estimates are paramount for policy implications and economic interpretations. The foundation assumptions of linear regression, including linearity, independence, homoscedasticity, and normality of residuals, are prerequisites for OLS to attain these desirable properties. It is imperative, therefore, to conduct diagnostic tests and assess the validity of these assumptions to ensure the robustness of the OLS estimators used in our analysis."
+1\. ***Linear in coefficients and error term***: The model is linear in its terms and the error term.
 
-### **Assumptions**
+2\. ***Error term has zero mean***: The error term averages zero, ensuring unbiasedness.
 
-**I. Linearity**
+3\. ***No correlation between independent variables and error term***: Independent variables should not predict the error term.
 
-The relationship between the independent variable X and the dependent variable Y is linear. This means that changes in X are associated with proportional changes in Y. A straight line should provide a good fit to the data points when plotted on a graph.
+4\. ***Observations of error term are uncorrelated*****:** Each error term observation doesn't predict the next.
 
-You can create a scatter plot of Y versus X and visually inspect whether a straight line could well represent the relationship. Alternatively, you can plot the residuals versus the fitted values and check for any obvious patterns or non-linearity.
+5\. ***Homoscedasticity*****:** The error term's variance is consistent across observations.
 
-**II. Independence:**
+6\. ***No perfect multicollinearity***: No independent variable is a perfect linear function of others.
 
-Observations are independent of each other. The value of Y for one observation should not depend on the value of Y for any other observation.
-
-This assumption is more about study design and data collection. Ensure that your observations are not correlated in time or space. For example, if you're analyzing economic data across regions, make sure that the regions are not influencing each other.
-
-**III. Homoscedasticity (Equal Variance):**
-
-The variance of the residuals (the errors) is constant across all levels of X. This means that the spread or "width" of the residuals should remain roughly the same across all values of the independent variable.
-
-A plot of residuals versus fitted values should show a random scatter and not display any funnel-like shapes (wider at one end).
-
-**IV. Normality of Residuals:**
-
-The residuals (the differences between observed and predicted values) are normally distributed. This assumption is particularly important for hypothesis testing and creating confidence intervals.
-
-A Quantile-Quantile (Q-Q) plot of the residuals can show if they follow a normal distribution. The points should fall roughly along a straight line.
-
-**V. No Perfect Multicollinearity (Specific to Multiple Regression)**
-
-In multiple regression settings, this assumes that no independent variable is a perfect linear function of any other independent variables. While this is more pertinent to multiple linear regression, it is crucial there because high correlation between independent variables can lead to unstable coefficient estimates.
-
-Checking the variance inflation factor (VIF) for each variable; a VIF above 5-10 indicates a problematic amount of collinearity.
-
-**Visualization**
+7\. ***Normally distributed error term (Optional*****)**: This aids in statistical testing, although not required for unbiased OLS estimates
 
 ```{r}
 #| echo: false
+#| output: false
+#| label: fig-9
+#| fig-cap: "Residuals vs fitted plot and normal Q-Q residuals plot"
 
 # Making two plots, first one is a residuals vs fitted plot, while the other is a normal Q-Q residuals plot
-plot(lm, which = 1:2) 
+#plot(lm, which = 1:2) 
 ```
 
-We've made two plots that can help us understand the relationship between GDP per capita and the Gini coefficient, and that together with the regression statistics can help with discussing if the classical OLS assumptions hold for the model. The first one is a plot that shows us residuals vs fitted values, which can help us check the homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horisontal 0 line, something that can inducate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity.
-
-The other plot - normal Q-Q plot - is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed. There are however some outliers in the tails, that suggest some variation from normality.
-
-In both of these plots, we can see that there are some outliers, these can affect the fit of the model. These outliers might come from regions that have a high GDP per capita compared to rest of the regions, like Paris in France that is a financial hub.
+The residuals vs fitted values and the Q-plot, combined with the regression statistics may help us find out if classical OLS assumptions are met. The first help us check for homoscedasticity assumption of a linear regression model. The residuals should be randomly scattered around the horizontal 0 line, something that can indicate that the variances of the error terms are constant. In our plot, the residuals are in some extent randomly distributed, and there is also no clear pattern; this suggest that there is likely no significant issues with heteroscedasticity or non-linearity. The latter is used to assess if the residuals of the linear model are normally distributed. In our plot, most of the points follow the line closely, suggesting that the residuals are normally distributed. There are however some outliers in the tails, that suggest some variation from normality. Both plots are presented in appendix.
 
 ```{r}
 #| echo: false
-#| label: fig_scatterplot-all
+#| output: false
+#| label: fig-10
 #| cap-location: bottom
 #| fig-cap: "Relationship Between GDP per Capita and Gini"
 
@@ -765,9 +756,11 @@ ggplot(data2010, aes(x = log_GDP_per_capita, y = gini_n2)) +
 
 In this plot we are visualizing the relationship between GDP per capita and gini by using a mix of the two previous plots. We can here as well, see extreme outliers.
 
-## Part 2B: Exploring Other Determinants of Inequity
+MÅ SKRIVE MER HER!!
 
-### I. Data Acquisition
+### Part 2B: Exploring Other Determinants of Inequity
+
+#### I. Data Acquisition
 
 Se data section for more specifications on the added population nut2, transport infrastructure and education.
 
@@ -868,7 +861,7 @@ cleaned_data <- Merged_datasets_gini |>
   distinct(id_nuts2, .keep_all = TRUE)
 ```
 
-### II. Multiple Linear Regression Model
+#### II. Multiple Linear Regression Model
 
 Multiple Linear Regression (MLR) extends simple linear regression to incorporate multiple explanatory variables, allowing us to examine how multiple factors impact a dependent variable. Choosing a data set from the year 2010 that consists of various regions, with data on each region's economic indicators, demographic variables, and other factors. Our aim is to understand how these variables collectively affect regional inequality.
 
@@ -878,7 +871,9 @@ In both our simple linear regression model, and now in our multiple linear regre
 
 ```{r}
 #| echo: false
-#| fig-cap: Multiple Linear Regression Model
+#| output: false
+#| label: tbl-3
+#| fig-cap: "Multiple Linear Regression Model"
 
 # Estimations with the help of several independent variables
 
@@ -900,7 +895,7 @@ huxreg("Model" = lm1,
        statistics = c("r.squared","adj.r.squared", "statistic", "p.value"))
 ```
 
-### Model specification
+#### II. Model specification
 
 **Understanding the Coefficients**
 
@@ -908,7 +903,7 @@ Intercept beta_0 Represents the expected value of the dependent variable when al
 
 Slope Coefficients beta_1, beta_2, \..., \\beta_k \\))\*\*: Represent the expected change in the dependent variable for a one-unit change in the respective independent variable, holding all other variables constant.
 
-### III. Model Interpretation
+#### III. Model Interpretation
 
 Our first model in the Multiple Linear Regression model examine how education in addition to GDP per capita can help explain the gini coefficient. The second model look at both education, GDP per capita, and population density, while the third model examine them all and also add rail network.
 
@@ -920,11 +915,11 @@ The adjusted R-squared for model 3 is 0.370 \~ 37%; this suggest that this model
 
 To summarize, we can see that the population density is the variable that affects the gini coeffcient the most. The more people that live in an area, the bigger the economic inequality is.
 
-# Assignment 3: Alternative Functional Forms and Panel Estimates
+## Alternative Functional Forms and Panel Estimates
 
-## Testing Development Effects Across Subsets
+### Testing Development Effects Across Subsets
 
-### Subset Analysis
+#### Subset Analysis
 
 When exploring whether the effect of development and economic inequality is significantly different between different subsets. We look at the variantions between our biggest country (France) compared to the rest of the countries.
 
@@ -932,6 +927,8 @@ Choosing France as a dummy variable amongst our group of countries could be just
 
 ```{r}
 #| echo: false
+#| #| label: tbl-4
+#| fig-cap: "Regression analysis France vs other countries"
 
 # Dummy variable
 gini_filtered$France <- ifelse(gini_filtered$id_nuts0 == "FR", 1,0)
@@ -945,7 +942,7 @@ lmC = lm(gini_n2 ~ GDP_per_capita, filter(gini_filtered, France == 0))
 huxreg(list("France" = lmFR, "All other countries" = lmC), statistics = c(N = "nobs", R2 = "r.squared", FStat = "statistic", PValue = "p.value"), note = "Note: {stars} T statistics in brackets.")
 ```
 
-### Subset Analysis Discussion
+#### Subset Analysis Discussion
 
 For France, the regression model shows us a significant and positive relationship between GDP per capita and the Gini coefficient. The intercept is statistically significant, but negative. The positive coefficient of GDP per capita of 0.028 is highly significant with a p-value lower than 0.001; this suggests that when GDP per capita in France rises, then economic inequality rises correspondingly as well. We can also see this by looking at the R-squared of 0.637, indicating that around 63.7% of the variation in the economic inequality can be explained by changes in economic development (GDP per capita). To summarize our findings for France, we can see that economic growth in France can be associated with rising economic inequality, something that could possibly be due to a concentration of wealth in some regions (like Paris for example).
 
@@ -977,6 +974,8 @@ Including a cubic term in a regression model enables the analysis of intricate d
 
 ```{r}
 #| echo: false
+#| label: tbl-5
+#| fig-cap: "Linear, logarithmic and quadratic model"
 
 # Comparing the different models with the linear model
 
@@ -1005,6 +1004,8 @@ The other countries also indicates a U-shaped relationship, despite R-squared le
 
 ```{r}
 #| echo: false
+#| label: fig-11
+#| fig-cap: "Figure of logarithmic model for France: Predicted vs actual gini coefficients"
 
 # Visaulization of Logarithmic model for France
 
@@ -1026,6 +1027,8 @@ Even with a logarithmic model, extreme outliers such as those spotted above, at 
 
 ```{r}
 #| echo: false
+#| label: fig-12
+#| fig-cap: "Figure of logarithmic model for other countries: Predicted vs actual gini coefficients"
 
 # Visaulization of Logarithmic model for the other countries
 
@@ -1053,6 +1056,8 @@ When analyzing both plots, it's clear that the relationship between economic dev
 
 ```{r}
 #| echo: false
+#| label: fig-13
+#| fig-cap: "Figure of quuadratic model for France: Predicted vs actual gini coefficients"
 
 # Quadratic model for France
 
@@ -1070,6 +1075,8 @@ ggplot(france_data, aes(x = log(GDP_per_capita), y = gini_n2)) +
 
 ```{r}
 #| echo: false
+#| label: fig-14
+#| fig-cap: "Figure of quuadratic model for the other countries: Predicted vs actual gini coefficients"
 
 # Quadratic model for the other countries
 
@@ -1091,7 +1098,7 @@ The quadratic model for the other countries shows a more subtle U-shaped relatio
 
 Incorporating these observations, both plots still signify a non-linear relationship between GDP per capita and income inequality, but with varying patterns and intensities between France and the other countries. The pronounced curve for France supports a stronger Kuznets curve effect, while for the other countries, the effect is less pronounced and the connection between economic growth and inequality appears to be weaker and more influenced by external or unmodeled factors.
 
-### Results Interpretation
+#### Results Interpretation
 
 The linear model, while providing a significant fit for France, falls short for the other countries, suggesting that the economic inequality's relationship to GDP per capita may not be linear or might be influenced by factors not captured in a simple linear model. The logarithmic model's reduced explanatory power compared to the linear model for France suggests that the relationship between GDP and inequality may not be strictly proportional across all levels of GDP per capita.
 
@@ -1099,9 +1106,11 @@ The quadratic model's U-shaped curve implies that as countries develop, inequali
 
 In conclusion, while the linear model provides a baseline understanding of the relationship between GDP per capita and income inequality, the logarithmic and quadratic models offer more nuanced insights that can lead to a deeper understanding of the underlying economic mechanisms. These alternative models highlight the importance of considering non-linear dynamics when analyzing economic relationships.
 
-## Heteroskedasticity Testing and Causality Discussion
+MÅ FIKSE PÅ NOE MED N OG U SHAPE (SE TILBAKEMELDING)
 
-### Heteroskedasticity Testing
+### Heteroskedasticity Testing and Causality Discussion
+
+#### Heteroskedasticity Testing
 
 Heteroskedasticity is according to @wooldridge2020 an important factor to consider in econometrics and statistical modelling, especially in the context of regression analysis. Heteroskedasticity refers to the condition in regression analysis where the variance of the error terms (residuals) is not constant across all levels of the independent variables [@wooldridge2020]. In simpler terms, the spread of the residuals varies at different points in the regression model. Moreover, heteroskedasticity can lead to inefficient estimators and unreliable hypothesis tests. Leading to the assumption of homoscedastic in MRL not being met. In other words the variance of the error terms is not constant across all levels if the independent variables when heteroskedasticity is present.
 
@@ -1142,6 +1151,8 @@ The residuals versus fitted values plot is another diagnostic tool that helps in
 
 ```{r}
 #| echo: false
+#| label: fig-15
+#| fig-cap: "Residuals vs fitted values for linear model, all countries combined"
 
 # Residuals vs fitted values for linear model, all countries combined (including France)
 
@@ -1184,19 +1195,33 @@ Panel data estimation is a method used in econometrics to analyse data that invo
 ```{r}
 #| echo: false
 #| output: false
+# filtering data 
+fgini_nuts_2 <- gini_nuts_2 |> 
+  filter(!is.na(population),
+         population != 0,
+         GDP_per_capita != 0, 
+         GDP_per_capita != "NA"
+  ) 
+```
 
-# Panel estiamtion
+```{r}
+#| echo: false
+#| output: false
+#| label: tbl-6
+#| fig-cap: "Panel estimations"
 
-plm1 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = gini_filtered, index = c("id_nuts0"), model = "within",effect = "twoway") |> 
+# Panel estimations
+
+plm1 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = fgini_nuts_2, index = c("id_nuts0"), model = "within",effect = "twoway") |> 
   coeftest(vcov. = vcovHC, type = "HC1", save = TRUE)
 
-plm2 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = gini_filtered, index = c("year"), model = "within",effect = "twoway") |> 
+plm2 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = fgini_nuts_2, index = c("year"), model = "within",effect = "twoway") |> 
   coeftest(vcov. = vcovHC, type = "HC1", save = TRUE)
 
-plm3 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = gini_filtered, index = c("id_nuts2"), model = "within",effect = "twoway") |> 
+plm3 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = fgini_nuts_2, index = c("id_nuts2"), model = "within",effect = "twoway") |> 
   coeftest(vcov. = vcovHC, type = "HC1", save = TRUE)
 
-plm4 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = gini_filtered, index = c("year","id_nuts2"), model = "within",effect = "twoway") |> 
+plm4 <- plm(gini_n2 ~ GDP_per_capita + log(GDP_per_capita), data = fgini_nuts_2, index = c("year","id_nuts2"), model = "within",effect = "twoway") |> 
   coeftest(vcov. = vcovHC, type = "HC1", save = TRUE)
 
 huxreg(plm1, plm2, plm3, plm4, statistics = c("nobs","r.squared","adj.r.squared", "statistic", "p.value"), 
@@ -1206,11 +1231,25 @@ huxreg(plm1, plm2, plm3, plm4, statistics = c("nobs","r.squared","adj.r.squared"
 
 ### Panel Estimation Analysis
 
+By looking at the results of the panel estimation, we can see a distinct relationship between GDP per capita and regional inequality, with a significant variability observed across the different models. Model 1 and 2 shows a significant positive correlation between GDP per capita and regional inequality, which suggests that higher economic output per capita is associated with greater inequality. The negatice coefficients for the log of GDP per capita imply that relative increases in economic prosperity could lead to an reduction in inequality; however, models 3 and 4 show that this association becomes less strong or irrelevant, suggesting that the influence of economic forces on inequality depends on regional or temporal characteristics.
+
+These variations underscore the influence of fixed effects, showing that country-specific, temporal and regional characteristics can alter our understanding of economic disparity. When we compare it to cross-sectional estimates, we can see the panel data's ability to caputre temporal changes and control for heterogenity, offers a more comprenehsive perspective. This is in contrast with the static nature of cross-sectional analysis, which might overlook the complexities and nature of economic inequality. The panel approach provides deeper insights into the development of regional disparities and factors influencing them.
+
 ### Panel Estimation Discussion
 
-# References
+The findings from the panel estimation offer insightful revelations about the relationship between GDP per capita and regional inequality; but we also have to look at potential methodological limitations and biases. The models sensitivity to different fixed effects suggests a nuanced, but potentially inconsistent understanding of inequality. This variability reflect the complexity of economic factors at play, and raises concerns about omitted variable bias, where key inlfuencers like industrial composition or demographic changes might be missing.
+
+The inherent challenges in accurately measuring GDP per capita and inequality could introduce measurement errors, affecting the reliability of the results. While panel data provides a dynamic view over cross-sectional data, establishing causality remains elusive, and the correlations observed should be interpreted with caution. The study's generalizability is also limited with its focus on a specific set of countries and times, which may not represent broader global dynamics. There is a low R-squared in some of the models, something that might've occured due to unexplained variances, suggesting that other significant, but unaccounted factors might be influencing regional inequality. Additionally, the economic significance on the finding needs careful consideration in order to understand the-world impact of these economic relationships. Overall the findings should be interpreted within the context of these potential biases and limitations, and they underscore the complexity of modeling and understanding economic phenomenas such as regional inequality.
+
+# Discussion
+
+# Limitations and Future Research
+
+# Conclusion
 
 # Appendix
+
+1.  **Descriptive statistics**
 
 ```{r summary-stats-appendix, echo=FALSE}
 # Descriptive statistics GDP per capita, mean, min, max, SD
@@ -1237,3 +1276,31 @@ print(summary_stats_slovakia)
 cat("\nSummary Statistics for Slovakia's GDP Per Capita:\n")
 print(summary_stats_denmark)
 ```
+
+2.  **Boxplot**
+
+![](GDP_pc_Boxplot.png)
+
+3.  **Regression statistics of all countries separately for the year 2010**
+
+```{r}
+#| echo: false
+#| fig-cap: Regression statistics of all countries for the year 2010
+
+cat("Intercept (Coefficient 1):", b0_earn, "\n")
+cat("Slope of log GDP per capita (Coefficient 2):", b1_earn, "\n")
+```
+
+![](images/Regression_all_countries2010-01.png)
+
+**Testing for OLS assumtions**
+
+```{r}
+#| echo: false
+#| 
+
+# Making two plots, first one is a residuals vs fitted plot, while the other is a normal Q-Q residuals plot
+plot(lm, which = 1:2) 
+```
+
+# References
